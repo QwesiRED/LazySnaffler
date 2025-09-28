@@ -26,21 +26,43 @@ def parse_snaffler_log(log_path):
                     idx = parts.index('[File]')
                 except ValueError:
                     continue
-                # Map fields as in PowerShell
+                
+                # Extract user@computer and timestamp from the beginning of the line
+                user_computer = ''
+                timestamp = ''
+                if len(parts) > 0:
+                    # First part contains [user@computer]
+                    user_computer = parts[0]
+                if len(parts) > 1:
+                    # Second part contains timestamp
+                    timestamp = parts[1]
+                
+                # Map fields according to Snaffler log format
                 severity = parts[idx+1] if len(parts) > idx+1 else ''
                 rule = parts[idx+2] if len(parts) > idx+2 else ''
+                permission = parts[idx+3] if len(parts) > idx+3 else ''
                 keyword = parts[idx+6] if len(parts) > idx+6 else ''
+                file_size = parts[idx+7] if len(parts) > idx+7 else ''
                 modified = parts[idx+8] if len(parts) > idx+8 else ''
                 unc = parts[idx+9] if len(parts) > idx+9 else ''
+                
+                # Extract file extension from UNC path
                 extension = ''
                 if unc:
                     m = re.search(r'(\.[A-Za-z0-9]+)$', unc)
                     extension = m.group(1) if m else ''
+                
+                # Content is everything after the UNC path
                 content = parts[idx+10] if len(parts) > idx+10 else ''
+                
                 rows.append({
+                    'timestamp': timestamp,
+                    'user_computer': user_computer,
                     'severity': severity,
                     'rule': rule,
+                    'permission': permission,
                     'keyword': keyword,
+                    'file_size': file_size,
                     'modified': modified,
                     'extension': extension,
                     'unc': unc,
@@ -50,7 +72,10 @@ def parse_snaffler_log(log_path):
 
 def write_csv(rows, csv_path):
     with open(csv_path, 'w', newline='', encoding='utf-8') as f:
-        writer = csv.DictWriter(f, fieldnames=['severity','rule','keyword','modified','extension','unc','content'])
+        writer = csv.DictWriter(f, fieldnames=[
+            'timestamp', 'user_computer', 'severity', 'rule', 'permission', 
+            'keyword', 'file_size', 'modified', 'extension', 'unc', 'content'
+        ])
         writer.writeheader()
         for row in rows:
             writer.writerow(row)

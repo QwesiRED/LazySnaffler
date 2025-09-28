@@ -41,32 +41,47 @@
       color: var(--text-main);
     }
     .card, .stat-card, .top-rules-card, .tab-content {
-      background: var(--bg-card);
-      color: var(--text-main);
-      border-color: var(--border-main);
+      background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+      color: #e8f4f8;
+      border: 1px solid #4a6741;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
     .table-dark, .dataTables_wrapper .dataTables_filter input, .form-select, .form-control {
-      background: var(--table-header) !important;
-      color: var(--text-main) !important;
-      border-color: var(--border-main) !important;
+      background: linear-gradient(135deg, #1a1d23 0%, #23272b 100%) !important;
+      color: #e8f4f8 !important;
+      border: 1px solid #4a6741 !important;
+      border-radius: 6px !important;
     }
     .table-striped > tbody > tr:nth-of-type(odd) {
-      background: var(--table-row-alt) !important;
+      background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%) !important;
     }
     .table-striped > tbody > tr:nth-of-type(even) {
-      background: var(--table-row) !important;
+      background: linear-gradient(135deg, #1a1d23 0%, #23272b 100%) !important;
     }
     .btn-sharp, .btn-outline-sharp {
-      color: var(--brand-primary);
-      border-color: var(--brand-primary);
+      color: #17a2b8;
+      border-color: #17a2b8;
+      border-radius: 6px;
+      font-weight: 600;
+      transition: all 0.3s ease;
     }
     .btn-sharp {
-      background: var(--brand-primary);
-      color: #fff;
+      background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+      color: white;
+      box-shadow: 0 2px 4px rgba(23, 162, 184, 0.3);
+    }
+    .btn-sharp:hover, .btn-sharp:focus {
+      background: linear-gradient(135deg, #138496 0%, #0f6674 100%);
+      color: white;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(23, 162, 184, 0.4);
     }
     .btn-outline-sharp:hover, .btn-outline-sharp:focus {
-      background: var(--brand-primary);
-      color: #fff;
+      background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+      color: white;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(23, 162, 184, 0.4);
     }
     .btn-outline-sharp {
       background: transparent;
@@ -148,18 +163,18 @@
       background: transparent;
       transition: background 0.2s, color 0.2s;
     }
-    .nav-tabs { border-bottom: 2px solid #1976d2; }
-    .tab-content { background: #23272b; border-radius: 0 0 12px 12px; padding: 1rem 0.5rem; margin-bottom: 1.2rem; border: 1.5px solid #2d3238; border-top: none; }
-    .btn-sharp { background: #1976d2; color: #fff; border-radius: 6px; font-weight: 600; border: none; transition: background 0.2s; }
-    .btn-sharp:hover, .btn-sharp:focus { background: #1565c0; color: #fff; }
-    .btn-outline-sharp { border: 2px solid #1976d2; color: #1976d2; background: transparent; border-radius: 6px; font-weight: 600; }
-    .btn-outline-sharp:hover, .btn-outline-sharp:focus { background: #1976d2; color: #fff; }
+    .nav-tabs { border-bottom: 2px solid #17a2b8; }
+    .tab-content { background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); border-radius: 0 0 12px 12px; padding: 1rem 0.5rem; margin-bottom: 1.2rem; border: 1.5px solid #4a6741; border-top: none; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+    .btn-sharp { background: linear-gradient(135deg, #17a2b8 0%, #138496 100%); color: #fff; border-radius: 6px; font-weight: 600; border: none; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(23, 162, 184, 0.3); }
+    .btn-sharp:hover, .btn-sharp:focus { background: linear-gradient(135deg, #138496 0%, #0f6674 100%); color: #fff; transform: translateY(-1px); box-shadow: 0 4px 8px rgba(23, 162, 184, 0.4); }
+    .btn-outline-sharp { border: 2px solid #17a2b8; color: #17a2b8; background: transparent; border-radius: 6px; font-weight: 600; transition: all 0.3s ease; }
+    .btn-outline-sharp:hover, .btn-outline-sharp:focus { background: linear-gradient(135deg, #17a2b8 0%, #138496 100%); color: #fff; transform: translateY(-1px); box-shadow: 0 4px 8px rgba(23, 162, 184, 0.4); }
     .fab-upload {
       position: fixed;
       bottom: 24px;
       right: 24px;
       z-index: 1000;
-      background: #43a047;
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
       color: #fff;
       border-radius: 50%;
       width: 48px;
@@ -168,12 +183,12 @@
       align-items: center;
       justify-content: center;
       font-size: 1.5rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
       border: none;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all 0.3s ease;
     }
-    .fab-upload:active, .fab-upload:focus { background: #1976d2; }
+    .fab-upload:active, .fab-upload:focus { background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%); transform: scale(0.95); }
     @media (max-width: 900px) {
       .dashboard-cards { flex-direction: column; align-items: stretch; gap: 0.7rem; }
       .stat-card, .stat-card.total { min-width: 100%; }
@@ -198,10 +213,10 @@
     @media (min-width: 601px) { .fab-upload { display: none; } }
     .dashboard-actions { display: flex; gap: 0.5rem; margin-bottom: 0.7rem; flex-wrap: wrap; }
     .dashboard-actions .btn { min-width: 100px; font-size: 0.95rem; }
-    .severity-Black { background: #222 !important; color: #fff !important; border-radius: 6px; padding: 2px 10px; display: inline-block; }
-    .severity-Red { background: #e53935 !important; color: #fff !important; border-radius: 6px; padding: 2px 10px; display: inline-block; }
-    .severity-Yellow { background: #fbc02d !important; color: #222 !important; border-radius: 6px; padding: 2px 10px; display: inline-block; }
-    .severity-Green { background: #43a047 !important; color: #fff !important; border-radius: 6px; padding: 2px 10px; display: inline-block; }
+    .severity-Black { background: linear-gradient(135deg, #343a40 0%, #495057 100%) !important; color: #fff !important; border-radius: 6px; padding: 4px 12px; display: inline-block; font-weight: 600; box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+    .severity-Red { background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important; color: #fff !important; border-radius: 6px; padding: 4px 12px; display: inline-block; font-weight: 600; box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3); }
+    .severity-Yellow { background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%) !important; color: #212529 !important; border-radius: 6px; padding: 4px 12px; display: inline-block; font-weight: 600; box-shadow: 0 2px 4px rgba(255, 193, 7, 0.3); }
+    .severity-Green { background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important; color: #fff !important; border-radius: 6px; padding: 4px 12px; display: inline-block; font-weight: 600; box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3); }
     
     /* Enhanced Brand Logo Styling */
     .brand-logo {
@@ -272,6 +287,43 @@
     .dataTables_wrapper .dataTables_filter select:focus {
       border-color: #1976d2 !important;
       box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.25) !important;
+    }
+    
+    /* Table column width constraints */
+    #lootTable th:nth-child(11), #lootTable td:nth-child(11) { /* UNC column */
+      max-width: 300px;
+      word-break: break-all;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
+    #lootTable th:nth-child(12), #lootTable td:nth-child(12) { /* Content column */
+      max-width: 200px;
+      word-break: break-all;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
+    /* Tooltip for truncated content */
+    #lootTable td:nth-child(11):hover, #lootTable td:nth-child(12):hover {
+      position: relative;
+    }
+    
+    #lootTable td:nth-child(11):hover::after, #lootTable td:nth-child(12):hover::after {
+      content: attr(title);
+      position: absolute;
+      bottom: 100%;
+      left: 0;
+      background: #333;
+      color: white;
+      padding: 5px;
+      border-radius: 4px;
+      white-space: pre-wrap;
+      z-index: 1000;
+      max-width: 400px;
+      word-break: break-word;
     }
   </style>
 </head>
@@ -449,9 +501,13 @@
                   <thead class="thead-dark">
                     <tr>
                       <th>Actions</th>
+                      <th>Timestamp</th>
+                      <th>User@Computer</th>
                       <th>Severity</th>
                       <th>Rule</th>
+                      <th>Permission</th>
                       <th>Keyword</th>
+                      <th>File Size</th>
                       <th>Modified</th>
                       <th>Extension</th>
                       <th>UNC</th>
@@ -631,17 +687,20 @@
           `<button class='btn btn-outline-sharp btn-sm mark-reviewed ms-1' title='Mark as Reviewed' data-row='${idx}' tabindex="0" aria-label="Mark as Reviewed"><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none' style='vertical-align:middle;'><rect x='3' y='3' width='14' height='14' rx='3' fill='none' stroke='#bdbdbd' stroke-width='2'/></svg></button>`;
         
         return [
-          `<button class='btn btn-outline-sharp btn-sm view-details me-1' title='View Details' data-row='${idx}' tabindex="0" aria-label="View Details"><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none' style='vertical-align:middle;'><ellipse cx='10' cy='10' rx='8' ry='6' stroke='#1976d2' stroke-width='2' fill='none'/><circle cx='10' cy='10' r='2.5' fill='#1976d2'/></svg></button>` +
-          `<button class='btn btn-outline-sharp btn-sm copy-row ms-1' title='Copy Row' data-row='${idx}' tabindex="0" aria-label="Copy Row"><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none' style='vertical-align:middle;'><rect x='5' y='3' width='10' height='14' rx='2' fill='none' stroke='#1976d2' stroke-width='2'/><rect x='9' y='7' width='10' height='14' rx='2' fill='none' stroke='#1976d2' stroke-width='2'/></svg></button>` +
-          `<button class='btn btn-outline-sharp btn-sm note-row ms-1' title='Add/View Note' data-row='${idx}' tabindex="0" aria-label="Add/View Note"><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none' style='vertical-align:middle;'><rect x='3' y='3' width='14' height='14' rx='2' fill='none' stroke='#1976d2' stroke-width='2'/><path d='M6 14l8-8M8 6h6v6' stroke='#1976d2' stroke-width='2' stroke-linecap='round'/></svg></button>` +
+          `<button class='btn btn-outline-sharp btn-sm view-details me-1' title='View Details' data-row='${idx}' tabindex="0" aria-label="View Details"><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none' style='vertical-align:middle;'><ellipse cx='10' cy='10' rx='8' ry='6' stroke='#17a2b8' stroke-width='2' fill='none'/><circle cx='10' cy='10' r='2.5' fill='#17a2b8'/></svg></button>` +
+          `<button class='btn btn-outline-sharp btn-sm copy-row ms-1' title='Copy Row' data-row='${idx}' tabindex="0" aria-label="Copy Row"><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none' style='vertical-align:middle;'><rect x='5' y='3' width='10' height='14' rx='2' fill='none' stroke='#6f42c1' stroke-width='2'/><rect x='9' y='7' width='10' height='14' rx='2' fill='none' stroke='#6f42c1' stroke-width='2'/></svg></button>` +
           markButton,
+          row.timestamp||'',
+          row.user_computer||'',
           `<span class="severity-${row.severity}">${row.severity||''}</span>`,
           row.rule||'',
+          row.permission||'',
           row.keyword||'',
+          row.file_size||'',
           row.modified||'',
           row.extension||'',
-          row.unc||'',
-          row.content||'',
+          `<span title="${(row.unc||'').replace(/"/g, '&quot;')}">${row.unc||''}</span>`,
+          `<span title="${(row.content||'').replace(/"/g, '&quot;')}">${row.content||''}</span>`,
           isReviewed ? `<span class="badge badge-success"><i class="fas fa-check"></i> Reviewed</span>` : `<span class="badge badge-warning"><i class="fas fa-clock"></i> Pending</span>`
         ];
       });
@@ -650,16 +709,20 @@
         data: tableData,
         columns: [
           { title: 'Actions', orderable: false, className: 'dt-center dt-nowrap' },
+          { title: 'Timestamp', className: 'dt-nowrap' },
+          { title: 'User@Computer', className: 'dt-nowrap' },
           { title: 'Severity', className: 'dt-center dt-nowrap' },
           { title: 'Rule', className: 'dt-nowrap' },
+          { title: 'Permission', className: 'dt-center dt-nowrap' },
           { title: 'Keyword', className: 'dt-nowrap' },
+          { title: 'File Size', className: 'dt-center dt-nowrap' },
           { title: 'Modified', className: 'dt-nowrap' },
           { title: 'Extension', className: 'dt-center dt-nowrap' },
           { title: 'UNC', className: 'dt-nowrap' },
           { title: 'Content' },
           { title: 'Status', orderable: false, className: 'dt-center dt-nowrap' }
         ],
-        order: [[1, 'asc'], [4, 'desc']],
+        order: [[3, 'asc'], [8, 'desc']],
         pageLength: 25,
         lengthMenu: [10, 25, 50, 100, 250],
         responsive: true,
@@ -693,6 +756,8 @@
       filterRow.id = 'filterRow';
       filterRow.innerHTML = `
         <th></th>
+        <th></th>
+        <th></th>
         <th><select class='form-select form-select-sm' id='filterSeverity' aria-label='Filter by Severity'>
           <option value=''>All</option>
           <option value='Red'>Red</option>
@@ -701,6 +766,8 @@
           <option value='Black'>Black</option>
         </select></th>
         <th><select class='form-select form-select-sm' id='filterRule' aria-label='Filter by Rule'><option value=''>All</option></select></th>
+        <th></th>
+        <th></th>
         <th></th>
         <th></th>
         <th><select class='form-select form-select-sm' id='filterExt' aria-label='Filter by Extension'><option value=''>All</option></select></th>
@@ -722,7 +789,7 @@
       statusSel.addEventListener('change', function() {
         const val = this.value;
         if (lootTable) {
-          lootTable.column(8).search(val ? '^' + val + '$' : '', true, false).draw();
+          lootTable.column(12).search(val ? '^' + val + '$' : '', true, false).draw();
         }
       });
 
@@ -764,10 +831,10 @@
       }
 
       // Filtering logic
-      ruleSel.onchange = function() { lootTable.column(2).search(this.value).draw(); };
-      extSel.onchange = function() { lootTable.column(4).search(this.value).draw(); };
+      ruleSel.onchange = function() { lootTable.column(4).search(this.value).draw(); };
+      extSel.onchange = function() { lootTable.column(9).search(this.value).draw(); };
       const sevSel = document.getElementById('filterSeverity');
-      sevSel.onchange = function() { lootTable.column(1).search(this.value).draw(); };
+      sevSel.onchange = function() { lootTable.column(3).search(this.value).draw(); };
 
       // Row expansion and modal logic
       // Update event delegation for action buttons to use data-row attribute
@@ -782,11 +849,11 @@
           tr.removeClass('shown');
         } else {
           const html = `
-            <div style='background:#23272b;border:2px solid #1976d2;padding:1em 1.2em;border-radius:10px;margin:0.2em 0;'>
-              <div style='margin-bottom:0.4em;'><b style='color:#1976d2;'>UNC:</b> <span style='word-break:break-all;color:#fff;'>${d.unc||''}</span></div>
-              <div><b style='color:#43a047;'>Content:</b></div>
-              <pre style='white-space:pre-wrap;background:#181a1b;color:#f1f1f1;padding:0.7em 1em;border-radius:7px;font-size:1em;max-height:180px;overflow:auto;'>${d.content||''}</pre>
-              <button class='btn btn-sharp btn-sm mt-2 view-full-modal' data-row='${idx}' onclick='showFullModal(${idx})'>View Full</button>
+            <div style='background:linear-gradient(135deg, #2c3e50 0%, #34495e 100%);border:1px solid #4a6741;padding:1.5em;border-radius:8px;margin:0.2em 0;box-shadow:0 2px 8px rgba(0,0,0,0.3);'>
+              <div style='margin-bottom:0.8em;'><b style='color:#6f42c1;font-size:0.9rem;'>UNC:</b> <span style='word-break:break-all;color:#e8f4f8;font-family:monospace;'>${d.unc||''}</span></div>
+              <div style='margin-bottom:0.5em;'><b style='color:#28a745;font-size:0.9rem;'>Content:</b></div>
+              <pre style='white-space:pre-wrap;background:#0d1117;color:#f0f6fc;padding:1em;border-radius:6px;font-size:0.9rem;max-height:180px;overflow:auto;border:1px solid #30363d;font-family:monospace;'>${d.content||''}</pre>
+              <button class='btn btn-sharp btn-sm mt-3 view-full-modal' data-row='${idx}' onclick='showFullModal(${idx})'>View Full</button>
             </div>
           `;
           row.child(html).show();
@@ -798,54 +865,14 @@
         const idx = $(this).data('row');
         const row = lootTable.row($(this).closest('tr')).data();
         const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = row[1];
+        tempDiv.innerHTML = row[3];
         const severity = tempDiv.textContent || tempDiv.innerText || '';
         const text =
-          `Severity: ${severity}\nRule: ${row[2]}\nKeyword: ${row[3]}\nModified: ${row[4]}\nExtension: ${row[5]}\nUNC: ${row[6]}\nContent: ${row[7]}\nStatus: ${row[8]}`;
+          `Timestamp: ${row[1]}\nUser@Computer: ${row[2]}\nSeverity: ${severity}\nRule: ${row[4]}\nPermission: ${row[5]}\nKeyword: ${row[6]}\nFile Size: ${row[7]}\nModified: ${row[8]}\nExtension: ${row[9]}\nUNC: ${row[10]}\nContent: ${row[11]}\nStatus: ${row[12]}`;
         navigator.clipboard.writeText(text).then(() => {
           showCopyTooltip(this, 'Copied!');
         });
       });
-      // Notes modal logic
-      if (!document.getElementById('notesModal')) {
-        const modal = document.createElement('div');
-        modal.id = 'notesModal';
-        modal.className = 'modal fade';
-        modal.tabIndex = -1;
-        modal.innerHTML = `
-          <div class='modal-dialog'>
-            <div class='modal-content' style='background:#23272b;color:#e0e0e0;'>
-              <div class='modal-header' style='border-bottom:2px solid #1976d2;'>
-                <h5 class='modal-title'>Row Note</h5>
-                <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
-              </div>
-              <div class='modal-body' id='modalNoteBody' style='font-size:1.08em;'>
-                <textarea id='noteText' class='form-control' rows='5' style='background:#181a1b;color:#e0e0e0;'></textarea>
-              </div>
-              <div class='modal-footer'>
-                <button type='button' class='btn btn-sharp' id='saveNoteBtn'>Save Note</button>
-              </div>
-            </div>
-          </div>`;
-        document.body.appendChild(modal);
-      }
-      $('#lootTable tbody').off('click', '.note-row');
-      $('#lootTable tbody').on('click', '.note-row', function() {
-        const idx = $(this).data('row');
-        const row = lootTable.row($(this).closest('tr')).data();
-        const key = 'note_' + [row[6], row[2], row[3]].join('_');
-        currentNoteKey = key;
-        document.getElementById('noteText').value = localStorage.getItem(key) || '';
-        const modal = new bootstrap.Modal(document.getElementById('notesModal'));
-        modal.show();
-      });
-      document.getElementById('saveNoteBtn').onclick = function() {
-        if (currentNoteKey) {
-          localStorage.setItem(currentNoteKey, document.getElementById('noteText').value);
-          document.getElementById('saveNoteBtn').textContent = 'Saved!';
-          setTimeout(()=>document.getElementById('saveNoteBtn').textContent='Save Note', 1200);
-        }
-      };
       // Reviewed/Flag logic
       $('#lootTable tbody').off('click', '.reviewed-row');
       $('#lootTable tbody').on('click', '.reviewed-row', function() {
@@ -856,8 +883,8 @@
         $(this).html(reviewed ? '⬜' : '✅');
       });
       // Keyboard navigation for action buttons
-      $('#lootTable tbody').off('keydown', '.view-details, .copy-row, .note-row, .reviewed-row');
-      $('#lootTable tbody').on('keydown', '.view-details, .copy-row, .note-row, .reviewed-row', function(e) {
+      $('#lootTable tbody').off('keydown', '.view-details, .copy-row, .mark-reviewed');
+      $('#lootTable tbody').on('keydown', '.view-details, .copy-row, .mark-reviewed', function(e) {
         const $btns = $(this).closest('td').find('button');
         const idx = $btns.index(this);
         if (e.key === 'Tab') {
@@ -1460,40 +1487,173 @@
       const row = globalData[rowIndex];
       const modalHtml = `
         <div class="modal fade" id="fullContentModal" tabindex="-1" aria-labelledby="fullContentModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-lg">
+          <div class="modal-dialog modal-xl">
             <div class="modal-content" style="background:#23272b;color:#e0e0e0;">
               <div class="modal-header" style="border-bottom:2px solid #1976d2;">
                 <h5 class="modal-title" id="fullContentModalLabel">Full Content Details</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
               </div>
-              <div class="modal-body">
-                <div class="mb-3">
-                  <h6 style="color:#1976d2;">Severity:</h6>
-                  <span class="severity-${row.severity}">${row.severity||''}</span>
+              <div class="modal-body" style="padding:2rem;max-width:100%;overflow-x:hidden;background:linear-gradient(135deg, #1a1d23 0%, #23272b 100%);">
+                <!-- Header Section -->
+                <div class="row mb-4">
+                  <div class="col-12">
+                    <div class="alert alert-info" style="background:linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);border:none;color:white;border-radius:8px;">
+                      <div class="d-flex align-items-center">
+                        <i class="fas fa-info-circle me-2" style="font-size:1.2rem;"></i>
+                        <div>
+                          <strong>Security Finding Details</strong>
+                          <div style="font-size:0.9rem;opacity:0.9;">Comprehensive analysis of detected security issue</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div class="mb-3">
-                  <h6 style="color:#1976d2;">Rule:</h6>
-                  <p>${row.rule||''}</p>
+
+                <!-- Main Content Grid -->
+                <div class="row g-4">
+                  <!-- Left Column -->
+                  <div class="col-lg-6">
+                    <div class="row g-3">
+                      <div class="col-6">
+                        <div class="info-card" style="background:linear-gradient(135deg, #2c3e50 0%, #34495e 100%);border:1px solid #4a6741;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.3);">
+                          <div class="card-body p-3">
+                            <div class="d-flex align-items-center mb-2">
+                              <i class="fas fa-clock me-2" style="color:#17a2b8;font-size:0.9rem;"></i>
+                              <h6 class="card-title mb-0" style="color:#17a2b8;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Timestamp</h6>
+                            </div>
+                            <p class="card-text mb-0" style="font-size:0.85rem;color:#e8f4f8;font-family:monospace;">${row.timestamp||'N/A'}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="info-card" style="background:linear-gradient(135deg, #2c3e50 0%, #34495e 100%);border:1px solid #4a6741;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.3);">
+                          <div class="card-body p-3">
+                            <div class="d-flex align-items-center mb-2">
+                              <i class="fas fa-exclamation-triangle me-2" style="color:#dc3545;font-size:0.9rem;"></i>
+                              <h6 class="card-title mb-0" style="color:#dc3545;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Severity</h6>
+                            </div>
+                            <p class="card-text mb-0" style="font-size:0.85rem;"><span class="severity-${row.severity}">${row.severity||'N/A'}</span></p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="info-card" style="background:linear-gradient(135deg, #2c3e50 0%, #34495e 100%);border:1px solid #4a6741;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.3);">
+                          <div class="card-body p-3">
+                            <div class="d-flex align-items-center mb-2">
+                              <i class="fas fa-shield-alt me-2" style="color:#6f42c1;font-size:0.9rem;"></i>
+                              <h6 class="card-title mb-0" style="color:#6f42c1;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Permission</h6>
+                            </div>
+                            <p class="card-text mb-0" style="font-size:0.85rem;color:#e8f4f8;font-weight:600;">${row.permission||'N/A'}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="info-card" style="background:linear-gradient(135deg, #2c3e50 0%, #34495e 100%);border:1px solid #4a6741;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.3);">
+                          <div class="card-body p-3">
+                            <div class="d-flex align-items-center mb-2">
+                              <i class="fas fa-weight-hanging me-2" style="color:#fd7e14;font-size:0.9rem;"></i>
+                              <h6 class="card-title mb-0" style="color:#fd7e14;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">File Size</h6>
+                            </div>
+                            <p class="card-text mb-0" style="font-size:0.85rem;color:#e8f4f8;font-family:monospace;">${row.file_size||'N/A'}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="info-card" style="background:linear-gradient(135deg, #2c3e50 0%, #34495e 100%);border:1px solid #4a6741;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.3);">
+                          <div class="card-body p-3">
+                            <div class="d-flex align-items-center mb-2">
+                              <i class="fas fa-file me-2" style="color:#20c997;font-size:0.9rem;"></i>
+                              <h6 class="card-title mb-0" style="color:#20c997;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Extension</h6>
+                            </div>
+                            <p class="card-text mb-0" style="font-size:0.85rem;color:#e8f4f8;font-weight:600;">${row.extension||'N/A'}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="info-card" style="background:linear-gradient(135deg, #2c3e50 0%, #34495e 100%);border:1px solid #4a6741;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.3);">
+                          <div class="card-body p-3">
+                            <div class="d-flex align-items-center mb-2">
+                              <i class="fas fa-calendar-alt me-2" style="color:#0dcaf0;font-size:0.9rem;"></i>
+                              <h6 class="card-title mb-0" style="color:#0dcaf0;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Modified</h6>
+                            </div>
+                            <p class="card-text mb-0" style="font-size:0.85rem;color:#e8f4f8;font-family:monospace;">${row.modified||'N/A'}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Right Column -->
+                  <div class="col-lg-6">
+                    <div class="row g-3">
+                      <div class="col-12">
+                        <div class="info-card" style="background:linear-gradient(135deg, #2c3e50 0%, #34495e 100%);border:1px solid #4a6741;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.3);">
+                          <div class="card-body p-3">
+                            <div class="d-flex align-items-center mb-2">
+                              <i class="fas fa-user me-2" style="color:#17a2b8;font-size:0.9rem;"></i>
+                              <h6 class="card-title mb-0" style="color:#17a2b8;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">User@Computer</h6>
+                            </div>
+                            <p class="card-text mb-0" style="font-size:0.85rem;color:#e8f4f8;word-break:break-all;overflow-wrap:break-word;font-family:monospace;">${row.user_computer||'N/A'}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="info-card" style="background:linear-gradient(135deg, #2c3e50 0%, #34495e 100%);border:1px solid #4a6741;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.3);">
+                          <div class="card-body p-3">
+                            <div class="d-flex align-items-center mb-2">
+                              <i class="fas fa-gavel me-2" style="color:#dc3545;font-size:0.9rem;"></i>
+                              <h6 class="card-title mb-0" style="color:#dc3545;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Rule</h6>
+                            </div>
+                            <p class="card-text mb-0" style="font-size:0.85rem;color:#e8f4f8;word-break:break-all;overflow-wrap:break-word;font-weight:600;">${row.rule||'N/A'}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="info-card" style="background:linear-gradient(135deg, #2c3e50 0%, #34495e 100%);border:1px solid #4a6741;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.3);">
+                          <div class="card-body p-3">
+                            <div class="d-flex align-items-center mb-2">
+                              <i class="fas fa-search me-2" style="color:#ffc107;font-size:0.9rem;"></i>
+                              <h6 class="card-title mb-0" style="color:#ffc107;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Keyword</h6>
+                            </div>
+                            <p class="card-text mb-0" style="font-size:0.8rem;color:#e8f4f8;word-break:break-all;overflow-wrap:break-word;font-family:monospace;background:#1a1d23;padding:0.5rem;border-radius:4px;">${row.keyword||'N/A'}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div class="mb-3">
-                  <h6 style="color:#1976d2;">Keyword:</h6>
-                  <p>${row.keyword||''}</p>
+                
+                <!-- Full Width Sections -->
+                <div class="row mt-4">
+                  <div class="col-12">
+                    <div class="info-card" style="background:linear-gradient(135deg, #2c3e50 0%, #34495e 100%);border:1px solid #4a6741;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.3);">
+                      <div class="card-body p-3">
+                        <div class="d-flex align-items-center mb-3">
+                          <i class="fas fa-folder-open me-2" style="color:#6f42c1;font-size:1rem;"></i>
+                          <h6 class="card-title mb-0" style="color:#6f42c1;font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">UNC Path</h6>
+                        </div>
+                        <div style="background:#0d1117;padding:1rem;border-radius:6px;border:1px solid #30363d;max-height:120px;overflow-y:auto;overflow-x:auto;">
+                          <p style="font-size:0.85rem;margin:0;white-space:nowrap;font-family:monospace;color:#f0f6fc;">${row.unc||'N/A'}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div class="mb-3">
-                  <h6 style="color:#1976d2;">Modified:</h6>
-                  <p>${row.modified||''}</p>
-                </div>
-                <div class="mb-3">
-                  <h6 style="color:#1976d2;">Extension:</h6>
-                  <p>${row.extension||''}</p>
-                </div>
-                <div class="mb-3">
-                  <h6 style="color:#1976d2;">UNC Path:</h6>
-                  <p style="word-break:break-all;background:#181a1b;padding:0.5rem;border-radius:4px;">${row.unc||''}</p>
-                </div>
-                <div class="mb-3">
-                  <h6 style="color:#43a047;">Content:</h6>
-                  <pre style="white-space:pre-wrap;background:#181a1b;color:#f1f1f1;padding:1rem;border-radius:4px;max-height:400px;overflow:auto;font-size:0.9rem;">${row.content||''}</pre>
+                
+                <div class="row mt-4">
+                  <div class="col-12">
+                    <div class="info-card" style="background:linear-gradient(135deg, #2c3e50 0%, #34495e 100%);border:1px solid #4a6741;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.3);">
+                      <div class="card-body p-3">
+                        <div class="d-flex align-items-center mb-3">
+                          <i class="fas fa-code me-2" style="color:#28a745;font-size:1rem;"></i>
+                          <h6 class="card-title mb-0" style="color:#28a745;font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Content</h6>
+                        </div>
+                        <div style="background:#0d1117;padding:1rem;border-radius:6px;border:1px solid #30363d;max-height:350px;overflow:auto;">
+                          <pre style="white-space:pre-wrap;margin:0;font-family:'Consolas', 'Monaco', 'Courier New', monospace;font-size:0.85rem;color:#f0f6fc;line-height:1.4;word-break:break-word;overflow-wrap:break-word;">${row.content||'N/A'}</pre>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="modal-footer">

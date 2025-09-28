@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+  <title>LazySnaffler Report</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
+  <link rel="icon" type="image/png" href="">
+  <!-- AdminLTE CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css">
+  <style>
+    :root {
+      --brand-primary: #1976d2;
+      --brand-accent: #43a047;
+      --bg-main: #181a1b;
+      --bg-card: #23272b;
+      --text-main: #e0e0e0;
+      --text-invert: #181a1b;
+      --border-main: #2d3238;
+      --table-header: #23272b;
+      --table-row: #181a1b;
+      --table-row-alt: #23272b;
+    }
+    [data-theme="light"] {
+      --brand-primary: #1976d2;
+      --brand-accent: #43a047;
+      --bg-main: #f5f7fa;
+      --bg-card: #fff;
+      --text-main: #23272b;
+      --text-invert: #fff;
+      --border-main: #bdbdbd;
+      --table-header: #e3eaf2;
+      --table-row: #fff;
+      --table-row-alt: #f5f7fa;
+    }
+    body {
+      background: var(--bg-main);
+      color: var(--text-main);
+    }
+    .card, .stat-card, .top-rules-card, .tab-content {
+      background: var(--bg-card);
+      color: var(--text-main);
+      border-color: var(--border-main);
+    }
+    .table-dark, .dataTables_wrapper .dataTables_filter input, .form-select, .form-control {
+      background: var(--table-header) !important;
+      color: var(--text-main) !important;
+      border-color: var(--border-main) !important;
+    }
+    .table-striped > tbody > tr:nth-of-type(odd) {
+      background: var(--table-row-alt) !important;
+    }
+    .table-striped > tbody > tr:nth-of-type(even) {
+      background: var(--table-row) !important;
+    }
+    .btn-sharp, .btn-outline-sharp {
+      color: var(--brand-primary);
+      border-color: var(--brand-primary);
+    }
+    .btn-sharp {
+      background: var(--brand-primary);
+      color: #fff;
+    }
+    .btn-outline-sharp:hover, .btn-outline-sharp:focus {
+      background: var(--brand-primary);
+      color: #fff;
+    }
+    .btn-outline-sharp {
+      background: transparent;
+    }
+    .dashboard-cards { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; justify-content: center; }
+    .stat-card {
+      min-width: 120px;
+      min-height: 80px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.01em;
+      transition: transform 0.1s;
+      border: none;
+      color: #fff;
+      padding: 0.5rem 0.5rem;
+    }
+    .stat-card.total {
+      background: linear-gradient(90deg, #1976d2 60%, #43a047 100%);
+      color: #fff;
+      font-size: 1.1rem;
+      min-width: 140px;
+      min-height: 80px;
+      box-shadow: 0 4px 16px rgba(25,118,210,0.13);
+      border: 2px solid #1976d2;
+    }
+    .stat-card.black { background: #222; color: #fff; border-bottom: 4px solid #444; }
+    .stat-card.red { background: #e53935; color: #fff; border-bottom: 4px solid #b71c1c; }
+    .stat-card.yellow { background: #fbc02d; color: #222; border-bottom: 4px solid #bfa100; }
+    .stat-card.green { background: #43a047; color: #fff; border-bottom: 4px solid #1b5e20; }
+    .stat-label { font-size: 1rem; opacity: 0.92; margin-bottom: 0.1rem; }
+    .stat-value { font-size: 1.5rem; font-weight: 900; letter-spacing: 0.01em; }
+    .stat-extra { font-size: 0.85rem; opacity: 0.8; margin-top: 0.1rem; }
+    .top-rules-card {
+      background: #23272b;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0.7rem 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .top-rules-title { font-size: 1rem; font-weight: 700; color: #1976d2; margin-bottom: 0.3rem; }
+    .top-rules-list { margin-bottom: 0; padding-left: 1.2rem; }
+    .top-rules-list li { margin-bottom: 0.1rem; font-size: 0.98rem; }
+    .divider { border-top: 2px solid #1976d2; margin: 1.2rem 0 1rem 0; }
+    .most-common-ext, .most-recent-date {
+      font-size: 0.92rem;
+      margin-top: 0.2rem;
+      color: #bdbdbd;
+      text-align: center;
+    }
+    .chart-container { min-height: 180px; max-height: 220px; margin-bottom: 0.5rem; }
+    .chart-container canvas { max-height: 180px !important; }
+    .table-responsive { margin-top: 1.2rem; }
+    .dt-center { text-align: center; }
+    .dt-nowrap { white-space: nowrap; }
+    .nav-tabs .nav-link.active {
+      background: var(--brand-primary);
+      color: #fff !important;
+      border-radius: 12px 12px 0 0;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(25,118,210,0.13);
+      border: 2px solid var(--brand-primary);
+      border-bottom: none;
+    }
+    .nav-tabs .nav-link {
+      color: var(--text-main);
+      font-weight: 500;
+      border: none;
+      border-radius: 12px 12px 0 0;
+      background: transparent;
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-tabs { border-bottom: 2px solid #1976d2; }
+    .tab-content { background: #23272b; border-radius: 0 0 12px 12px; padding: 1rem 0.5rem; margin-bottom: 1.2rem; border: 1.5px solid #2d3238; border-top: none; }
+    .btn-sharp { background: #1976d2; color: #fff; border-radius: 6px; font-weight: 600; border: none; transition: background 0.2s; }
+    .btn-sharp:hover, .btn-sharp:focus { background: #1565c0; color: #fff; }
+    .btn-outline-sharp { border: 2px solid #1976d2; color: #1976d2; background: transparent; border-radius: 6px; font-weight: 600; }
+    .btn-outline-sharp:hover, .btn-outline-sharp:focus { background: #1976d2; color: #fff; }
+    .fab-upload {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+      background: #43a047;
+      color: #fff;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .fab-upload:active, .fab-upload:focus { background: #1976d2; }
+    @media (max-width: 900px) {
+      .dashboard-cards { flex-direction: column; align-items: stretch; gap: 0.7rem; }
+      .stat-card, .stat-card.total { min-width: 100%; }
+    }
+    @media (max-width: 600px) {
+      .summary-card { min-width: 90px; font-size: 0.85rem; }
+      .summary-value { font-size: 1rem; }
+      .dropzone { padding: 0.7rem; font-size: 0.95rem; }
+      .card { font-size: 0.9rem; }
+      .chart-container { min-height: 100px; max-height: 120px; }
+      .chart-container canvas { max-height: 100px !important; }
+      .table-responsive { font-size: 0.85rem; }
+      .dataTables_wrapper .dataTables_filter input { width: 100% !important; }
+      .tab-content { padding: 0.5rem 0.1rem; }
+    }
+    .dataTables_wrapper .dataTables_filter input, .dataTables_wrapper .dataTables_length select {
+      min-height: 2em;
+      font-size: 0.95em;
+      border-radius: 6px;
+    }
+    .table-responsive { overflow-x: auto; }
+    @media (min-width: 601px) { .fab-upload { display: none; } }
+    .dashboard-actions { display: flex; gap: 0.5rem; margin-bottom: 0.7rem; flex-wrap: wrap; }
+    .dashboard-actions .btn { min-width: 100px; font-size: 0.95rem; }
+    .severity-Black { background: #222 !important; color: #fff !important; border-radius: 6px; padding: 2px 10px; display: inline-block; }
+    .severity-Red { background: #e53935 !important; color: #fff !important; border-radius: 6px; padding: 2px 10px; display: inline-block; }
+    .severity-Yellow { background: #fbc02d !important; color: #222 !important; border-radius: 6px; padding: 2px 10px; display: inline-block; }
+    .severity-Green { background: #43a047 !important; color: #fff !important; border-radius: 6px; padding: 2px 10px; display: inline-block; }
+    
+    /* Enhanced Brand Logo Styling */
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0.5rem 0;
+    }
+    
+    .brand-logo i {
+      font-size: 1.8rem;
+      color: #1976d2;
+      text-shadow: 0 0 15px rgba(25, 118, 210, 0.4);
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    }
+    
+    .brand-text {
+      font-size: 1.3rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #1976d2 0%, #42a5f5 50%, #1976d2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      letter-spacing: 0.5px;
+    }
+    
+    .brand-link:hover .brand-logo i {
+      color: #42a5f5;
+      text-shadow: 0 0 20px rgba(66, 165, 245, 0.6);
+      transform: scale(1.1) rotate(5deg);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .brand-link:hover .brand-text {
+      background: linear-gradient(135deg, #42a5f5 0%, #1976d2 50%, #42a5f5 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      transform: translateX(2px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .brand-link {
+      transition: all 0.3s ease;
+      border-radius: 8px;
+      margin: 0.5rem;
+    }
+    
+    .brand-link:hover {
+      background: rgba(25, 118, 210, 0.1);
+      box-shadow: 0 4px 12px rgba(25, 118, 210, 0.2);
+    }
+    
+    /* Status column filter styling */
+    .dataTables_wrapper .dataTables_filter select {
+      background-color: #181a1b !important;
+      color: #e0e0e0 !important;
+      border: 1px solid #495057 !important;
+      border-radius: 4px !important;
+    }
+    
+    .dataTables_wrapper .dataTables_filter select option {
+      background-color: #181a1b !important;
+      color: #e0e0e0 !important;
+    }
+    
+    .dataTables_wrapper .dataTables_filter select:focus {
+      border-color: #1976d2 !important;
+      box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.25) !important;
+    }
+  </style>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+  <div class="wrapper">
+    <!-- Sidebar -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4" id="sidebar">
+        <a href="#" class="brand-link">
+          <div class="brand-logo">
+            <i class="fas fa-shield-alt text-primary"></i>
+            <span class="brand-text font-weight-bold">LazySnaffler</span>
+          </div>
+        </a>
+      <div class="sidebar">
+        <nav class="mt-2">
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
+            <li class="nav-item">
+              <a href="#" class="nav-link active" id="navDashboard">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>Dashboard</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link" id="navTable">
+                <i class="nav-icon fas fa-table"></i>
+                <p>Data Table</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link" id="navSettings">
+                <i class="nav-icon fas fa-cog"></i>
+                <p>Settings</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link" id="navAbout">
+                <i class="nav-icon fas fa-info-circle"></i>
+                <p>About</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link" id="toggleSidebar">
+                <i class="nav-icon fas fa-bars"></i>
+                <p>Toggle Sidebar</p>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </aside>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+        </div>
+      </div>
+      <!-- Main content -->
+      <section class="content" id="dashboardSection">
+        <div class="container-fluid">
+          <div id="uploadCard" class="row justify-content-center align-items-center" style="min-height:40vh;">
+            <div class="col-md-6">
+              <div class="card card-primary card-outline text-center p-4">
+                <div class="card-body">
+                  <h3 class="mb-3">Upload your <code>lazysnaffler_loot.csv</code></h3>
+                  <p class="mb-4">Drag & drop your CSV file here, or <label for="fileInput" style="color:#007bff;cursor:pointer;text-decoration:underline;">browse</label> to select.<br>All processing is local in your browser.</p>
+                  <input type="file" id="fileInput" accept=".csv" class="form-control mb-3" style="display:none;" />
+                  <div id="dropzone" class="border border-primary rounded p-4 mb-2" style="background:#f8f9fa;cursor:pointer;">Drop CSV file here</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Stats and widgets below, hidden until CSV is loaded -->
+          <div id="statsAndWidgets" style="display:none;">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+              <div class="col">
+                <!-- small box -->
+                <div class="small-box bg-info">
+                  <div class="inner">
+                    <h3 id="totalFindings">0</h3>
+                    <p>Total Findings</p>
+                  </div>
+                  <div class="icon">
+                    <i class="fas fa-search"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="small-box bg-dark">
+                  <div class="inner">
+                    <h3 id="countBlack">0</h3>
+                    <p>Black</p>
+                  </div>
+                  <div class="icon">
+                    <i class="fas fa-user-secret"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="small-box bg-danger">
+                  <div class="inner">
+                    <h3 id="countRed">0</h3>
+                    <p>Red</p>
+                  </div>
+                  <div class="icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="small-box bg-warning">
+                  <div class="inner">
+                    <h3 id="countYellow">0</h3>
+                    <p>Yellow</p>
+                  </div>
+                  <div class="icon">
+                    <i class="fas fa-exclamation-circle"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="small-box bg-success">
+                  <div class="inner">
+                    <h3 id="countGreen">0</h3>
+                    <p>Green</p>
+                  </div>
+                  <div class="icon">
+                    <i class="fas fa-check-circle"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.row -->
+            <div class="row mt-3">
+              <div class="col-md-4">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Top Rules</h3>
+                  </div>
+                  <div class="card-body">
+                    <ol class="top-rules-list" id="topRules"></ol>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Severity Distribution</h3>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="severityChart" style="max-height: 300px;"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="content" id="tableSection" style="display:none;">
+        <div class="container-fluid">
+          <div class="card">
+            <div class="card-body">
+              <div class="table-responsive">
+                <div class="row mb-2">
+                  <div class="col-12">
+                    <div class="d-flex align-items-center">
+                      <label class="form-label me-2 mb-0">Search:</label>
+                      <input type="text" id="tableFilter" class="form-control me-2" placeholder="Search table data..." style="width: 300px;">
+                      <button class="btn btn-primary btn-sm" id="clearFiltersBtn" style="white-space: nowrap;">Clear Filters</button>
+                    </div>
+                  </div>
+                </div>
+                <table id="lootTable" class="table table-bordered table-hover" style="width:100%" role="table" aria-label="Findings Data Table">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>Actions</th>
+                      <th>Severity</th>
+                      <th>Rule</th>
+                      <th>Keyword</th>
+                      <th>Modified</th>
+                      <th>Extension</th>
+                      <th>UNC</th>
+                      <th>Content</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Settings and About sections can be updated similarly -->
+    </div>
+  </div>
+  <!-- AdminLTE JS -->
+  <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- PapaParse for CSV parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <!-- DataTables JS -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+  <!-- DataTables Buttons (Export) -->
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    // UI: Drag-and-drop and file input
+    const dropzone = document.getElementById('dropzone');
+    const fabUpload = document.getElementById('fabUpload');
+    const mainTabs = document.getElementById('mainTabs');
+    const mainTabsContent = document.getElementById('mainTabsContent');
+    const refreshBtn = document.getElementById('refreshBtn');
+    // Remove old event listeners that conflict with new upload logic
+    // Dashboard rendering
+    let lootTable;
+    window.severityChart = null;
+    // PDF export for dashboard summary (if exportDashboardBtn exists)
+    const exportDashboardBtn = document.getElementById('exportDashboardBtn');
+    if (exportDashboardBtn) {
+      exportDashboardBtn.onclick = async function() {
+        const dashboard = document.querySelector('.dashboard-cards');
+        const chart = document.querySelector('.chart-container');
+        const topRules = document.querySelector('.top-rules-card');
+        const doc = new window.jspdf.jsPDF({ orientation: 'p', unit: 'pt', format: 'a4' });
+        // Title
+        doc.setFontSize(22);
+        doc.text('LazySnaffler Dashboard Summary', 40, 50);
+        // Dashboard cards
+        await html2canvas(dashboard).then(canvas => {
+          const imgData = canvas.toDataURL('image/png');
+          doc.addImage(imgData, 'PNG', 40, 70, 520, 90);
+        });
+        // Top rules
+        await html2canvas(topRules).then(canvas => {
+          const imgData = canvas.toDataURL('image/png');
+          doc.addImage(imgData, 'PNG', 40, 170, 520, 60);
+        });
+        // Pie chart
+        await html2canvas(chart).then(canvas => {
+          const imgData = canvas.toDataURL('image/png');
+          doc.addImage(imgData, 'PNG', 40, 240, 320, 120);
+        });
+        doc.save('lazysnaffler_dashboard_summary.pdf');
+      };
+    }
+    function renderDashboard(data) {
+      // Store data globally for modal access
+      globalData = data;
+      
+      // Load reviewed items from localStorage (persist across data loads)
+      const savedReviewed = localStorage.getItem('reviewedItems');
+      if (savedReviewed) {
+        reviewedItems = new Set(JSON.parse(savedReviewed));
+      } else {
+        reviewedItems = new Set();
+      }
+      
+      // Clean up previous
+      if (lootTable) { lootTable.destroy(); $("#lootTable tbody").empty(); }
+      if (window.severityChart) { window.severityChart.destroy(); }
+      // Summary
+      const total = data.length;
+      const counts = { Black: 0, Red: 0, Yellow: 0, Green: 0 };
+      const ruleCounts = {};
+      const extCounts = {};
+      let mostRecent = null;
+      data.forEach(row => {
+        const sev = (row.severity||'').trim();
+        if (counts[sev] !== undefined) counts[sev]++;
+        const rule = (row.rule||'').trim();
+        if (rule) ruleCounts[rule] = (ruleCounts[rule]||0)+1;
+        const ext = (row.extension||'').trim();
+        if (ext) extCounts[ext] = (extCounts[ext]||0)+1;
+        const mod = (row.modified||'').trim();
+        if (mod && (!mostRecent || mod > mostRecent)) mostRecent = mod;
+      });
+      const totalFindingsEl = document.getElementById('totalFindings');
+      const countBlackEl = document.getElementById('countBlack');
+      const countRedEl = document.getElementById('countRed');
+      const countYellowEl = document.getElementById('countYellow');
+      const countGreenEl = document.getElementById('countGreen');
+      
+      if (totalFindingsEl) totalFindingsEl.textContent = total;
+      if (countBlackEl) countBlackEl.textContent = counts.Black;
+      if (countRedEl) countRedEl.textContent = counts.Red;
+      if (countYellowEl) countYellowEl.textContent = counts.Yellow;
+      if (countGreenEl) countGreenEl.textContent = counts.Green;
+      // Most common extension
+      const mostCommonExt = Object.entries(extCounts).sort((a,b)=>b[1]-a[1])[0];
+      const mostCommonExtEl = document.getElementById('mostCommonExt');
+      if (mostCommonExtEl) {
+        mostCommonExtEl.textContent = mostCommonExt ? `Most common ext: ${mostCommonExt[0]} (${mostCommonExt[1]})` : '';
+      }
+      // Most recent date
+      const mostRecentDateEl = document.getElementById('mostRecentDate');
+      if (mostRecentDateEl) {
+        mostRecentDateEl.textContent = mostRecent ? `Most recent: ${mostRecent}` : '';
+      }
+      // Top rules
+      const topRules = Object.entries(ruleCounts).sort((a,b)=>b[1]-a[1]).slice(0,5);
+      const topRulesList = document.getElementById('topRules');
+      if (topRulesList) {
+        topRulesList.innerHTML = '';
+        topRules.forEach(([rule, count]) => {
+          const li = document.createElement('li');
+          li.textContent = `${rule} (${count})`;
+          topRulesList.appendChild(li);
+        });
+      }
+      // Chart
+      const chartCanvas = document.getElementById('severityChart');
+      if (chartCanvas) {
+        const ctx = chartCanvas.getContext('2d');
+        const chartType = localStorage.getItem('chartType') || 'doughnut';
+        window.severityChart = new Chart(ctx, {
+        type: chartType,
+        data: {
+          labels: ['Black', 'Red', 'Yellow', 'Green'],
+          datasets: [{
+            data: [counts.Black, counts.Red, counts.Yellow, counts.Green],
+            backgroundColor: ['#222', '#e53935', '#fbc02d', '#43a047'],
+            borderColor: '#23272b',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          plugins: {
+            legend: { labels: { color: '#e0e0e0', font: { size: 12 } } }
+          },
+          layout: { padding: 0 },
+        }
+        });
+      }
+      // Table
+      const tableData = data.map((row, idx) => {
+        // Unique key for localStorage
+        const rowKey = 'reviewed_' + [row.unc, row.rule, row.keyword].join('_');
+        const reviewed = localStorage.getItem(rowKey) === '1';
+        const isReviewed = reviewedItems.has(idx);
+        const markButton = isReviewed ? 
+          `<button class='btn btn-outline-sharp btn-sm mark-reviewed ms-1' title='Mark as Reviewed' data-row='${idx}' tabindex="0" aria-label="Mark as Reviewed"><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none' style='vertical-align:middle;'><rect x='3' y='3' width='14' height='14' rx='3' fill='none' stroke='#43a047' stroke-width='2'/><path d='M6 11l3 3 5-5' stroke='#43a047' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg></button>` :
+          `<button class='btn btn-outline-sharp btn-sm mark-reviewed ms-1' title='Mark as Reviewed' data-row='${idx}' tabindex="0" aria-label="Mark as Reviewed"><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none' style='vertical-align:middle;'><rect x='3' y='3' width='14' height='14' rx='3' fill='none' stroke='#bdbdbd' stroke-width='2'/></svg></button>`;
+        
+        return [
+          `<button class='btn btn-outline-sharp btn-sm view-details me-1' title='View Details' data-row='${idx}' tabindex="0" aria-label="View Details"><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none' style='vertical-align:middle;'><ellipse cx='10' cy='10' rx='8' ry='6' stroke='#1976d2' stroke-width='2' fill='none'/><circle cx='10' cy='10' r='2.5' fill='#1976d2'/></svg></button>` +
+          `<button class='btn btn-outline-sharp btn-sm copy-row ms-1' title='Copy Row' data-row='${idx}' tabindex="0" aria-label="Copy Row"><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none' style='vertical-align:middle;'><rect x='5' y='3' width='10' height='14' rx='2' fill='none' stroke='#1976d2' stroke-width='2'/><rect x='9' y='7' width='10' height='14' rx='2' fill='none' stroke='#1976d2' stroke-width='2'/></svg></button>` +
+          `<button class='btn btn-outline-sharp btn-sm note-row ms-1' title='Add/View Note' data-row='${idx}' tabindex="0" aria-label="Add/View Note"><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none' style='vertical-align:middle;'><rect x='3' y='3' width='14' height='14' rx='2' fill='none' stroke='#1976d2' stroke-width='2'/><path d='M6 14l8-8M8 6h6v6' stroke='#1976d2' stroke-width='2' stroke-linecap='round'/></svg></button>` +
+          markButton,
+          `<span class="severity-${row.severity}">${row.severity||''}</span>`,
+          row.rule||'',
+          row.keyword||'',
+          row.modified||'',
+          row.extension||'',
+          row.unc||'',
+          row.content||'',
+          isReviewed ? `<span class="badge badge-success"><i class="fas fa-check"></i> Reviewed</span>` : `<span class="badge badge-warning"><i class="fas fa-clock"></i> Pending</span>`
+        ];
+      });
+      lootTable = $('#lootTable').DataTable({
+        destroy: true,
+        data: tableData,
+        columns: [
+          { title: 'Actions', orderable: false, className: 'dt-center dt-nowrap' },
+          { title: 'Severity', className: 'dt-center dt-nowrap' },
+          { title: 'Rule', className: 'dt-nowrap' },
+          { title: 'Keyword', className: 'dt-nowrap' },
+          { title: 'Modified', className: 'dt-nowrap' },
+          { title: 'Extension', className: 'dt-center dt-nowrap' },
+          { title: 'UNC', className: 'dt-nowrap' },
+          { title: 'Content' },
+          { title: 'Status', orderable: false, className: 'dt-center dt-nowrap' }
+        ],
+        order: [[1, 'asc'], [4, 'desc']],
+        pageLength: 25,
+        lengthMenu: [10, 25, 50, 100, 250],
+        responsive: true,
+        autoWidth: false,
+        dom: 'Brtip',
+        initComplete: function() {
+          // Status column filter will be added in renderDashboard function
+        },
+        buttons: [
+          { extend: 'copy', className: 'btn btn-outline-sharp btn-sm', text: 'Copy All (Filtered)' },
+          { extend: 'csv', className: 'btn btn-outline-sharp btn-sm', text: 'Export CSV' },
+          { extend: 'excel', className: 'btn btn-outline-sharp btn-sm', text: 'Export Excel' },
+          { extend: 'pdf', className: 'btn btn-outline-sharp btn-sm', text: 'Export PDF' },
+          { extend: 'colvis', className: 'btn btn-outline-sharp btn-sm', text: 'Show/Hide Columns' }
+        ],
+        language: {
+          search: "",
+          lengthMenu: "Show _MENU_ entries",
+          info: "Showing _START_ to _END_ of _TOTAL_ entries",
+          infoFiltered: "(filtered from _MAX_ total entries)",
+          zeroRecords: "No matching records found"
+        }
+      });
+
+      // Advanced filtering and row expansion/modal logic
+
+      // Add filter row to the table header (remove if already exists)
+      const oldFilterRow = document.getElementById('filterRow');
+      if (oldFilterRow) oldFilterRow.remove();
+      const filterRow = document.createElement('tr');
+      filterRow.id = 'filterRow';
+      filterRow.innerHTML = `
+        <th></th>
+        <th><select class='form-select form-select-sm' id='filterSeverity' aria-label='Filter by Severity'>
+          <option value=''>All</option>
+          <option value='Red'>Red</option>
+          <option value='Yellow'>Yellow</option>
+          <option value='Green'>Green</option>
+          <option value='Black'>Black</option>
+        </select></th>
+        <th><select class='form-select form-select-sm' id='filterRule' aria-label='Filter by Rule'><option value=''>All</option></select></th>
+        <th></th>
+        <th></th>
+        <th><select class='form-select form-select-sm' id='filterExt' aria-label='Filter by Extension'><option value=''>All</option></select></th>
+        <th></th>
+        <th></th>
+        <th><select class='form-select form-select-sm' id='filterStatus' aria-label='Filter by Status'><option value=''>All</option><option value='Reviewed'>Reviewed</option><option value='Pending'>Pending</option></select></th>
+      `;
+      document.querySelector('#lootTable thead').appendChild(filterRow);
+      // Populate Rule and Extension filters with unique values from data
+      const uniqueRule = [...new Set(data.map(r => (r.rule||'').trim()).filter(Boolean))];
+      const uniqueExt = [...new Set(data.map(r => (r.extension||'').trim()).filter(Boolean))];
+      const ruleSel = document.getElementById('filterRule');
+      uniqueRule.forEach(rule => ruleSel.appendChild(new Option(rule, rule)));
+      const extSel = document.getElementById('filterExt');
+      uniqueExt.forEach(ext => extSel.appendChild(new Option(ext, ext)));
+
+      // Add Status filter functionality
+      const statusSel = document.getElementById('filterStatus');
+      statusSel.addEventListener('change', function() {
+        const val = this.value;
+        if (lootTable) {
+          lootTable.column(8).search(val ? '^' + val + '$' : '', true, false).draw();
+        }
+      });
+
+      // Listen for column visibility changes and update filter row
+      lootTable.on('column-visibility.dt', function(e, settings, column, state, recalc) {
+        // Update filter row to match column visibility
+        const filterRow = document.getElementById('filterRow');
+        if (filterRow) {
+          const filterCells = filterRow.querySelectorAll('th');
+          filterCells.forEach((cell, index) => {
+            if (index < lootTable.columns().count()) {
+              const isVisible = lootTable.column(index).visible();
+              cell.style.display = isVisible ? '' : 'none';
+            }
+          });
+        }
+      });
+
+      // Add filter functionality to the new filter input
+      const tableFilter = document.getElementById('tableFilter');
+      const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+      
+      if (tableFilter) {
+        tableFilter.addEventListener('keyup', function() {
+          lootTable.search(this.value).draw();
+        });
+      }
+      
+      if (clearFiltersBtn) {
+        clearFiltersBtn.onclick = () => {
+          // Clear all filters
+          ruleSel.value = '';
+          extSel.value = '';
+          statusSel.value = '';
+          if (tableFilter) tableFilter.value = '';
+          lootTable.search('').draw();
+          lootTable.columns().search('').draw();
+        };
+      }
+
+      // Filtering logic
+      ruleSel.onchange = function() { lootTable.column(2).search(this.value).draw(); };
+      extSel.onchange = function() { lootTable.column(4).search(this.value).draw(); };
+      const sevSel = document.getElementById('filterSeverity');
+      sevSel.onchange = function() { lootTable.column(1).search(this.value).draw(); };
+
+      // Row expansion and modal logic
+      // Update event delegation for action buttons to use data-row attribute
+      $('#lootTable tbody').off('click', '.view-details');
+      $('#lootTable tbody').on('click', '.view-details', function() {
+        const idx = $(this).data('row');
+        const tr = $(this).closest('tr');
+        const row = lootTable.row(tr);
+        const d = data[idx];
+        if (row.child.isShown()) {
+          row.child.hide();
+          tr.removeClass('shown');
+        } else {
+          const html = `
+            <div style='background:#23272b;border:2px solid #1976d2;padding:1em 1.2em;border-radius:10px;margin:0.2em 0;'>
+              <div style='margin-bottom:0.4em;'><b style='color:#1976d2;'>UNC:</b> <span style='word-break:break-all;color:#fff;'>${d.unc||''}</span></div>
+              <div><b style='color:#43a047;'>Content:</b></div>
+              <pre style='white-space:pre-wrap;background:#181a1b;color:#f1f1f1;padding:0.7em 1em;border-radius:7px;font-size:1em;max-height:180px;overflow:auto;'>${d.content||''}</pre>
+              <button class='btn btn-sharp btn-sm mt-2 view-full-modal' data-row='${idx}' onclick='showFullModal(${idx})'>View Full</button>
+            </div>
+          `;
+          row.child(html).show();
+          tr.addClass('shown');
+        }
+      });
+      $('#lootTable tbody').off('click', '.copy-row');
+      $('#lootTable tbody').on('click', '.copy-row', function() {
+        const idx = $(this).data('row');
+        const row = lootTable.row($(this).closest('tr')).data();
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = row[1];
+        const severity = tempDiv.textContent || tempDiv.innerText || '';
+        const text =
+          `Severity: ${severity}\nRule: ${row[2]}\nKeyword: ${row[3]}\nModified: ${row[4]}\nExtension: ${row[5]}\nUNC: ${row[6]}\nContent: ${row[7]}\nStatus: ${row[8]}`;
+        navigator.clipboard.writeText(text).then(() => {
+          showCopyTooltip(this, 'Copied!');
+        });
+      });
+      // Notes modal logic
+      if (!document.getElementById('notesModal')) {
+        const modal = document.createElement('div');
+        modal.id = 'notesModal';
+        modal.className = 'modal fade';
+        modal.tabIndex = -1;
+        modal.innerHTML = `
+          <div class='modal-dialog'>
+            <div class='modal-content' style='background:#23272b;color:#e0e0e0;'>
+              <div class='modal-header' style='border-bottom:2px solid #1976d2;'>
+                <h5 class='modal-title'>Row Note</h5>
+                <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+              </div>
+              <div class='modal-body' id='modalNoteBody' style='font-size:1.08em;'>
+                <textarea id='noteText' class='form-control' rows='5' style='background:#181a1b;color:#e0e0e0;'></textarea>
+              </div>
+              <div class='modal-footer'>
+                <button type='button' class='btn btn-sharp' id='saveNoteBtn'>Save Note</button>
+              </div>
+            </div>
+          </div>`;
+        document.body.appendChild(modal);
+      }
+      $('#lootTable tbody').off('click', '.note-row');
+      $('#lootTable tbody').on('click', '.note-row', function() {
+        const idx = $(this).data('row');
+        const row = lootTable.row($(this).closest('tr')).data();
+        const key = 'note_' + [row[6], row[2], row[3]].join('_');
+        currentNoteKey = key;
+        document.getElementById('noteText').value = localStorage.getItem(key) || '';
+        const modal = new bootstrap.Modal(document.getElementById('notesModal'));
+        modal.show();
+      });
+      document.getElementById('saveNoteBtn').onclick = function() {
+        if (currentNoteKey) {
+          localStorage.setItem(currentNoteKey, document.getElementById('noteText').value);
+          document.getElementById('saveNoteBtn').textContent = 'Saved!';
+          setTimeout(()=>document.getElementById('saveNoteBtn').textContent='Save Note', 1200);
+        }
+      };
+      // Reviewed/Flag logic
+      $('#lootTable tbody').off('click', '.reviewed-row');
+      $('#lootTable tbody').on('click', '.reviewed-row', function() {
+        const idx = $(this).data('row');
+        const key = $(this).data('key');
+        const reviewed = localStorage.getItem(key) === '1';
+        localStorage.setItem(key, reviewed ? '0' : '1');
+        $(this).html(reviewed ? '⬜' : '✅');
+      });
+      // Keyboard navigation for action buttons
+      $('#lootTable tbody').off('keydown', '.view-details, .copy-row, .note-row, .reviewed-row');
+      $('#lootTable tbody').on('keydown', '.view-details, .copy-row, .note-row, .reviewed-row', function(e) {
+        const $btns = $(this).closest('td').find('button');
+        const idx = $btns.index(this);
+        if (e.key === 'Tab') {
+          // Let browser handle tab
+        } else if (e.key === 'ArrowRight') {
+          $btns.eq((idx+1)%$btns.length).focus();
+          e.preventDefault();
+        } else if (e.key === 'ArrowLeft') {
+          $btns.eq((idx-1+$btns.length)%$btns.length).focus();
+          e.preventDefault();
+        } else if (e.key === 'ArrowDown') {
+          // Move to same button in next row
+          const $rows = $('#lootTable tbody tr');
+          const rowIdx = $rows.index($(this).closest('tr'));
+          if (rowIdx < $rows.length-1) {
+            $rows.eq(rowIdx+1).find('button').eq(idx).focus();
+          }
+          e.preventDefault();
+        } else if (e.key === 'ArrowUp') {
+          const $rows = $('#lootTable tbody tr');
+          const rowIdx = $rows.index($(this).closest('tr'));
+          if (rowIdx > 0) {
+            $rows.eq(rowIdx-1).find('button').eq(idx).focus();
+          }
+          e.preventDefault();
+        } else if (e.key === 'Enter' || e.key === ' ') {
+          $(this).trigger('click');
+          e.preventDefault();
+        }
+      });
+    }
+    // Add focus outlines for all buttons and controls
+    const style = document.createElement('style');
+    style.innerHTML = `
+      button:focus, .form-select:focus, .form-control:focus {
+        outline: 3px solid #43a047 !important;
+        outline-offset: 2px;
+        box-shadow: 0 0 0 2px #1976d2 !important;
+      }
+      .visually-hidden-focusable:active, .visually-hidden-focusable:focus {
+        position: static !important;
+        left: 0 !important;
+        width: auto !important;
+        height: auto !important;
+        clip: auto !important;
+        background: #1976d2;
+        color: #fff;
+      }
+    `;
+    document.head.appendChild(style);
+    // Add ARIA roles/labels to action buttons
+    // Already present in button HTML: aria-label="View Details", etc.
+
+    // Theme toggle logic (if elements exist)
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    if (themeToggleBtn) {
+      function setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('lazysnaffler_theme', theme);
+        const themeLabel = document.getElementById('themeLabel');
+        const themeIcon = document.getElementById('themeIcon');
+        if (themeLabel) themeLabel.textContent = theme.charAt(0).toUpperCase() + theme.slice(1);
+        if (themeIcon) themeIcon.style.color = theme === 'dark' ? '#181a1b' : '#fff';
+      }
+      function toggleTheme() {
+        const current = document.documentElement.getAttribute('data-theme') || 'dark';
+        setTheme(current === 'dark' ? 'light' : 'dark');
+      }
+      themeToggleBtn.onclick = toggleTheme;
+      // On load, set theme from localStorage or default to dark
+      setTheme(localStorage.getItem('lazysnaffler_theme') || 'dark');
+    }
+
+    // Help modal logic (ensure DOM is ready)
+    document.addEventListener('DOMContentLoaded', function() {
+      const helpBtn = document.getElementById('helpBtn');
+      if (helpBtn) {
+        helpBtn.onclick = function() {
+          const modalEl = document.getElementById('helpModal');
+          if (modalEl) {
+            const modal = new bootstrap.Modal(modalEl);
+            modal.show();
+          }
+        };
+      }
+      // Tooltips for key buttons
+      const tooltipTriggerList = [].slice.call(document.querySelectorAll('[title]'));
+      tooltipTriggerList.forEach(function (el) {
+        new bootstrap.Tooltip(el);
+      });
+    });
+
+    // Navigation logic for AdminLTE sidebar
+    function showSection(section) {
+      document.getElementById('dashboardSection').style.display = section === 'dashboard' ? '' : 'none';
+      document.getElementById('tableSection').style.display = section === 'table' ? '' : 'none';
+      document.getElementById('navDashboard').classList.toggle('active', section === 'dashboard');
+      document.getElementById('navTable').classList.toggle('active', section === 'table');
+    }
+    
+    // About modal function
+    function showAboutModal() {
+      const modalHtml = `
+        <div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="background:#23272b;color:#e0e0e0;">
+              <div class="modal-header" style="border-bottom:2px solid #1976d2;">
+                <h5 class="modal-title" id="aboutModalLabel">
+                  <i class="fas fa-info-circle me-2"></i>About LazySnaffler Dashboard
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <h6 style="color:#1976d2;">Project Information</h6>
+                    <p><strong>Name:</strong> LazySnaffler Dashboard</p>
+                    <p><strong>Version:</strong> 1.0.0</p>
+                    <p><strong>Release Date:</strong> January 2025</p>
+                    <p><strong>Description:</strong> Modern, interactive dashboard for analyzing Snaffler log files with advanced filtering, visualization, and export capabilities.</p>
+                    
+                    <h6 style="color:#1976d2;" class="mt-4">Features</h6>
+                    <ul>
+                      <li>CSV file upload and parsing</li>
+                      <li>Interactive data visualization</li>
+                      <li>Advanced filtering and search</li>
+                      <li>Export to multiple formats</li>
+                      <li>Responsive design</li>
+                      <li>Dark/Light theme support</li>
+                    </ul>
+                  </div>
+                  <div class="col-md-6">
+                    <h6 style="color:#1976d2;">Author</h6>
+                    <p><strong>Developer:</strong> QwesiRed</p>
+                    
+                    <h6 style="color:#1976d2;" class="mt-4">Connect</h6>
+                    <div class="d-flex flex-column gap-2">
+                      <a href="https://github.com/QwesiRed" target="_blank" class="btn btn-outline-light btn-sm">
+                        <i class="fab fa-github me-2"></i>GitHub Repository
+                      </a>
+                      <a href="https://linkedin.com/in/qwesired" target="_blank" class="btn btn-outline-primary btn-sm">
+                        <i class="fab fa-linkedin me-2"></i>LinkedIn Profile
+                      </a>
+                      <a href="https://twitter.com/QwesiRed" target="_blank" class="btn btn-outline-info btn-sm">
+                        <i class="fab fa-twitter me-2"></i>Twitter Profile
+                      </a>
+                    </div>
+                    
+                    <h6 style="color:#1976d2;" class="mt-4">Technology Stack</h6>
+                    <div class="d-flex flex-wrap gap-1">
+                      <span class="badge bg-primary">HTML5</span>
+                      <span class="badge bg-success">CSS3</span>
+                      <span class="badge bg-warning text-dark">JavaScript</span>
+                      <span class="badge bg-info">Bootstrap 5</span>
+                      <span class="badge bg-secondary">AdminLTE</span>
+                      <span class="badge bg-dark">DataTables</span>
+                      <span class="badge bg-danger">Chart.js</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="mt-4 p-3" style="background:#181a1b;border-radius:8px;">
+                  <h6 style="color:#43a047;">License & Usage</h6>
+                  <p class="mb-0">This dashboard is designed for security professionals and penetration testers to analyze Snaffler output files. All processing is done locally in your browser - no data is transmitted to external servers.</p>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a href="https://github.com/QwesiRed/lazysnaffler-dashboard" target="_blank" class="btn btn-primary">
+                  <i class="fab fa-github me-2"></i>View Source Code
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Remove existing modal if any
+      const existingModal = document.getElementById('aboutModal');
+      if (existingModal) {
+        existingModal.remove();
+      }
+      
+      // Add modal to body
+      document.body.insertAdjacentHTML('beforeend', modalHtml);
+      
+      // Show modal
+      const modal = new bootstrap.Modal(document.getElementById('aboutModal'));
+      modal.show();
+    }
+    
+    // Settings modal function
+    function showSettingsModal() {
+      const currentTheme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
+      const currentTablePageLength = localStorage.getItem('tablePageLength') || '25';
+      const currentChartType = localStorage.getItem('chartType') || 'doughnut';
+      const currentEnableSearch = localStorage.getItem('enableSearch') !== 'false';
+      const currentEnableSorting = localStorage.getItem('enableSorting') !== 'false';
+      const currentExportCSV = localStorage.getItem('exportCSV') !== 'false';
+      const currentExportExcel = localStorage.getItem('exportExcel') !== 'false';
+      const currentExportPDF = localStorage.getItem('exportPDF') !== 'false';
+      
+      const modalHtml = `
+        <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="background:#23272b;color:#e0e0e0;">
+              <div class="modal-header" style="border-bottom:2px solid #1976d2;">
+                <h5 class="modal-title" id="settingsModalLabel">
+                  <i class="fas fa-cog me-2"></i>Settings
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <h6 style="color:#1976d2;">Appearance</h6>
+                    
+                    <div class="mb-3">
+                      <label for="themeSelect" class="form-label">Theme</label>
+                      <select class="form-select" id="themeSelect" style="background:#181a1b;color:#e0e0e0;border:1px solid #495057;">
+                        <option value="light" ${currentTheme === 'light' ? 'selected' : ''}>Light Theme</option>
+                        <option value="dark" ${currentTheme === 'dark' ? 'selected' : ''}>Dark Theme</option>
+                      </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                      <label for="chartTypeSelect" class="form-label">Chart Type</label>
+                      <select class="form-select" id="chartTypeSelect" style="background:#181a1b;color:#e0e0e0;border:1px solid #495057;">
+                        <option value="doughnut" ${currentChartType === 'doughnut' ? 'selected' : ''}>Doughnut</option>
+                        <option value="pie" ${currentChartType === 'pie' ? 'selected' : ''}>Pie</option>
+                        <option value="bar" ${currentChartType === 'bar' ? 'selected' : ''}>Bar</option>
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-6">
+                    <h6 style="color:#1976d2;">Data Table</h6>
+                    
+                    <div class="mb-3">
+                      <label for="pageLengthSelect" class="form-label">Rows per page</label>
+                      <select class="form-select" id="pageLengthSelect" style="background:#181a1b;color:#e0e0e0;border:1px solid #495057;">
+                        <option value="10" ${currentTablePageLength === '10' ? 'selected' : ''}>10</option>
+                        <option value="25" ${currentTablePageLength === '25' ? 'selected' : ''}>25</option>
+                        <option value="50" ${currentTablePageLength === '50' ? 'selected' : ''}>50</option>
+                        <option value="100" ${currentTablePageLength === '100' ? 'selected' : ''}>100</option>
+                        <option value="-1" ${currentTablePageLength === '-1' ? 'selected' : ''}>All</option>
+                      </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="enableSearch" ${currentEnableSearch ? 'checked' : ''}>
+                        <label class="form-check-label" for="enableSearch">
+                          Enable search functionality
+                        </label>
+                      </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="enableSorting" ${currentEnableSorting ? 'checked' : ''}>
+                        <label class="form-check-label" for="enableSorting">
+                          Enable column sorting
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="row mt-4">
+                  <div class="col-12">
+                    <h6 style="color:#1976d2;">Export Options</h6>
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="exportCSV" ${currentExportCSV ? 'checked' : ''}>
+                          <label class="form-check-label" for="exportCSV">
+                            CSV Export
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="exportExcel" ${currentExportExcel ? 'checked' : ''}>
+                          <label class="form-check-label" for="exportExcel">
+                            Excel Export
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="exportPDF" ${currentExportPDF ? 'checked' : ''}>
+                          <label class="form-check-label" for="exportPDF">
+                            PDF Export
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="mt-4 p-3" style="background:#181a1b;border-radius:8px;">
+                  <h6 style="color:#43a047;">Data Management</h6>
+                  <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-warning btn-sm" onclick="clearAllData()">
+                      <i class="fas fa-trash me-1"></i>Clear All Data
+                    </button>
+                    <button type="button" class="btn btn-info btn-sm" onclick="exportSettings()">
+                      <i class="fas fa-download me-1"></i>Export Settings
+                    </button>
+                    <button type="button" class="btn btn-success btn-sm" onclick="importSettings()">
+                      <i class="fas fa-upload me-1"></i>Import Settings
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Remove existing modal if any
+      const existingModal = document.getElementById('settingsModal');
+      if (existingModal) {
+        existingModal.remove();
+      }
+      
+      // Add modal to body
+      document.body.insertAdjacentHTML('beforeend', modalHtml);
+      
+      // Show modal
+      const modal = new bootstrap.Modal(document.getElementById('settingsModal'));
+      modal.show();
+    }
+    
+    // Save settings function
+    function saveSettings() {
+      const theme = document.getElementById('themeSelect').value;
+      const chartType = document.getElementById('chartTypeSelect').value;
+      const pageLength = document.getElementById('pageLengthSelect').value;
+      const enableSearch = document.getElementById('enableSearch').checked;
+      const enableSorting = document.getElementById('enableSorting').checked;
+      const exportCSV = document.getElementById('exportCSV').checked;
+      const exportExcel = document.getElementById('exportExcel').checked;
+      const exportPDF = document.getElementById('exportPDF').checked;
+      
+      // Save to localStorage
+      localStorage.setItem('theme', theme);
+      localStorage.setItem('chartType', chartType);
+      localStorage.setItem('tablePageLength', pageLength);
+      localStorage.setItem('enableSearch', enableSearch);
+      localStorage.setItem('enableSorting', enableSorting);
+      localStorage.setItem('exportCSV', exportCSV);
+      localStorage.setItem('exportExcel', exportExcel);
+      localStorage.setItem('exportPDF', exportPDF);
+      
+      // Apply theme
+      if (theme === 'dark') {
+        document.body.classList.add('dark-theme');
+      } else {
+        document.body.classList.remove('dark-theme');
+      }
+      
+      // Apply chart type if chart exists
+      if (window.severityChart && globalData.length > 0) {
+        window.severityChart.destroy();
+        // Recreate chart with new type
+        const chartCanvas = document.getElementById('severityChart');
+        if (chartCanvas) {
+          const ctx = chartCanvas.getContext('2d');
+          const counts = { Black: 0, Red: 0, Yellow: 0, Green: 0 };
+          globalData.forEach(d => { if (d.severity && counts.hasOwnProperty(d.severity)) counts[d.severity]++; });
+          window.severityChart = new Chart(ctx, {
+            type: chartType,
+            data: {
+              labels: ['Black', 'Red', 'Yellow', 'Green'],
+              datasets: [{
+                data: [counts.Black, counts.Red, counts.Yellow, counts.Green],
+                backgroundColor: ['#222', '#e53935', '#fbc02d', '#43a047'],
+                borderColor: '#23272b',
+                borderWidth: 2
+              }]
+            },
+            options: {
+              plugins: {
+                legend: { labels: { color: '#e0e0e0', font: { size: 12 } } }
+              },
+              layout: { padding: 0 },
+            }
+          });
+        }
+      }
+      
+      // Apply table settings if table exists
+      if (lootTable && globalData.length > 0) {
+        lootTable.page.len(parseInt(pageLength)).draw();
+        
+        // Update search and sorting
+        if (enableSearch) {
+          lootTable.search.enable();
+        } else {
+          lootTable.search.disable();
+        }
+        
+        if (enableSorting) {
+          lootTable.order.enable();
+        } else {
+          lootTable.order.disable();
+        }
+      }
+      
+      // Update export buttons visibility
+      const csvBtn = document.getElementById('exportCSV');
+      const excelBtn = document.getElementById('exportExcel');
+      const pdfBtn = document.getElementById('exportPDF');
+      
+      if (csvBtn) csvBtn.style.display = exportCSV ? 'inline-block' : 'none';
+      if (excelBtn) excelBtn.style.display = exportExcel ? 'inline-block' : 'none';
+      if (pdfBtn) pdfBtn.style.display = exportPDF ? 'inline-block' : 'none';
+      
+      // Close modal
+      const modal = bootstrap.Modal.getInstance(document.getElementById('settingsModal'));
+      modal.hide();
+      
+      // Show success message
+      alert('Settings saved successfully!');
+    }
+    
+    // Clear all data function
+    function clearAllData() {
+      if (confirm('Are you sure you want to clear all data? This action cannot be undone.')) {
+        globalData = [];
+        clearReviewedItems(); // Clear reviewed items when data is cleared
+        if (lootTable) {
+          lootTable.clear().draw();
+        }
+        if (window.severityChart) {
+          window.severityChart.destroy();
+        }
+        // Hide dashboard and show upload
+        document.getElementById('uploadCard').style.display = '';
+        document.getElementById('statsAndWidgets').style.display = 'none';
+        alert('All data cleared successfully!');
+      }
+    }
+    
+    // Export settings function
+    function exportSettings() {
+      const settings = {
+        theme: localStorage.getItem('theme') || 'light',
+        chartType: localStorage.getItem('chartType') || 'doughnut',
+        tablePageLength: localStorage.getItem('tablePageLength') || '25',
+        enableSearch: localStorage.getItem('enableSearch') === 'true',
+        enableSorting: localStorage.getItem('enableSorting') === 'true',
+        exportCSV: localStorage.getItem('exportCSV') === 'true',
+        exportExcel: localStorage.getItem('exportExcel') === 'true',
+        exportPDF: localStorage.getItem('exportPDF') === 'true'
+      };
+      
+      const dataStr = JSON.stringify(settings, null, 2);
+      const dataBlob = new Blob([dataStr], {type: 'application/json'});
+      const url = URL.createObjectURL(dataBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'lazysnaffler-settings.json';
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+    
+    // Import settings function
+    function importSettings() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.json';
+      input.onchange = function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            try {
+              const settings = JSON.parse(e.target.result);
+              localStorage.setItem('theme', settings.theme || 'light');
+              localStorage.setItem('chartType', settings.chartType || 'doughnut');
+              localStorage.setItem('tablePageLength', settings.tablePageLength || '25');
+              localStorage.setItem('enableSearch', settings.enableSearch !== undefined ? settings.enableSearch : true);
+              localStorage.setItem('enableSorting', settings.enableSorting !== undefined ? settings.enableSorting : true);
+              localStorage.setItem('exportCSV', settings.exportCSV !== undefined ? settings.exportCSV : true);
+              localStorage.setItem('exportExcel', settings.exportExcel !== undefined ? settings.exportExcel : true);
+              localStorage.setItem('exportPDF', settings.exportPDF !== undefined ? settings.exportPDF : true);
+              alert('Settings imported successfully! Please refresh the page to apply changes.');
+            } catch (error) {
+              alert('Error importing settings: Invalid file format.');
+            }
+          };
+          reader.readAsText(file);
+        }
+      };
+      input.click();
+    }
+    
+    // Review functionality
+    function markAsReviewed(idx) {
+      if (reviewedItems.has(idx)) {
+        // Unmark as reviewed
+        reviewedItems.delete(idx);
+        localStorage.setItem('reviewedItems', JSON.stringify([...reviewedItems]));
+        // Update the table row directly
+        if (lootTable) {
+          const row = lootTable.row(idx);
+          const data = row.data();
+          data[8] = `<span class="badge badge-warning"><i class="fas fa-clock"></i> Pending</span>`;
+          // Update the mark button to show unchecked state
+          data[0] = data[0].replace(
+            /<rect x="3" y="3" width="14" height="14" rx="3" fill="none" stroke="#43a047" stroke-width="2"\/><path d="M6 11l3 3 5-5" stroke="#43a047" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"\/>/g,
+            '<rect x="3" y="3" width="14" height="14" rx="3" fill="none" stroke="#bdbdbd" stroke-width="2"/>'
+          );
+          row.data(data).draw();
+        }
+      } else {
+        // Mark as reviewed
+        reviewedItems.add(idx);
+        localStorage.setItem('reviewedItems', JSON.stringify([...reviewedItems]));
+        // Update the table row directly
+        if (lootTable) {
+          const row = lootTable.row(idx);
+          const data = row.data();
+          data[8] = `<span class="badge badge-success"><i class="fas fa-check"></i> Reviewed</span>`;
+          // Update the mark button to show checked state
+          data[0] = data[0].replace(
+            /<rect x="3" y="3" width="14" height="14" rx="3" fill="none" stroke="#bdbdbd" stroke-width="2"\/>/g,
+            '<rect x="3" y="3" width="14" height="14" rx="3" fill="none" stroke="#43a047" stroke-width="2"/><path d="M6 11l3 3 5-5" stroke="#43a047" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
+          );
+          row.data(data).draw();
+        }
+      }
+      // Force table redraw to update checkbox states
+      setTimeout(() => {
+        if (lootTable) {
+          lootTable.draw();
+        }
+      }, 100);
+      
+      // Additional redraw to ensure checkbox updates
+      setTimeout(() => {
+        if (lootTable) {
+          lootTable.draw();
+        }
+      }, 200);
+    }
+    
+    // Clear reviewed items when data is cleared
+    function clearReviewedItems() {
+      reviewedItems.clear();
+      localStorage.removeItem('reviewedItems');
+    }
+    
+    // Clear reviewed items when new data is loaded (different dataset)
+    function clearReviewedItemsOnNewData() {
+      reviewedItems.clear();
+      localStorage.removeItem('reviewedItems');
+    }
+    
+    document.getElementById('navDashboard').onclick = () => showSection('dashboard');
+    document.getElementById('navTable').onclick = () => showSection('table');
+    document.getElementById('navAbout').onclick = () => showAboutModal();
+    document.getElementById('navSettings').onclick = () => showSettingsModal();
+    
+    // Review button event listeners
+    document.addEventListener('click', function(e) {
+      if (e.target.closest('.mark-reviewed')) {
+        e.preventDefault();
+        const button = e.target.closest('.mark-reviewed');
+        const rowIdx = parseInt(button.getAttribute('data-row'));
+        markAsReviewed(rowIdx);
+      }
+    });
+    // On load, show dashboard
+    showSection('dashboard');
+
+    // Status badge rendering (example, adapt to your data)
+    function renderStatusBadge(status) {
+      if (status === 'Active') return '<span class="badge badge-success">Active</span>';
+      if (status === 'Inactive') return '<span class="badge badge-secondary">Inactive</span>';
+      if (status === 'Suspended') return '<span class="badge badge-danger">Suspended</span>';
+      return '<span class="badge badge-light">Unknown</span>';
+    }
+    
+    // Global data variable to store CSV data
+    let globalData = [];
+    let reviewedItems = new Set(); // Track reviewed items by index
+    
+    // Full content modal function
+    function showFullModal(rowIndex) {
+      if (!globalData[rowIndex]) return;
+      
+      const row = globalData[rowIndex];
+      const modalHtml = `
+        <div class="modal fade" id="fullContentModal" tabindex="-1" aria-labelledby="fullContentModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="background:#23272b;color:#e0e0e0;">
+              <div class="modal-header" style="border-bottom:2px solid #1976d2;">
+                <h5 class="modal-title" id="fullContentModalLabel">Full Content Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <h6 style="color:#1976d2;">Severity:</h6>
+                  <span class="severity-${row.severity}">${row.severity||''}</span>
+                </div>
+                <div class="mb-3">
+                  <h6 style="color:#1976d2;">Rule:</h6>
+                  <p>${row.rule||''}</p>
+                </div>
+                <div class="mb-3">
+                  <h6 style="color:#1976d2;">Keyword:</h6>
+                  <p>${row.keyword||''}</p>
+                </div>
+                <div class="mb-3">
+                  <h6 style="color:#1976d2;">Modified:</h6>
+                  <p>${row.modified||''}</p>
+                </div>
+                <div class="mb-3">
+                  <h6 style="color:#1976d2;">Extension:</h6>
+                  <p>${row.extension||''}</p>
+                </div>
+                <div class="mb-3">
+                  <h6 style="color:#1976d2;">UNC Path:</h6>
+                  <p style="word-break:break-all;background:#181a1b;padding:0.5rem;border-radius:4px;">${row.unc||''}</p>
+                </div>
+                <div class="mb-3">
+                  <h6 style="color:#43a047;">Content:</h6>
+                  <pre style="white-space:pre-wrap;background:#181a1b;color:#f1f1f1;padding:1rem;border-radius:4px;max-height:400px;overflow:auto;font-size:0.9rem;">${row.content||''}</pre>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="copyFullContent(${rowIndex})">Copy All</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Remove existing modal if any
+      const existingModal = document.getElementById('fullContentModal');
+      if (existingModal) {
+        existingModal.remove();
+      }
+      
+      // Add modal to body
+      document.body.insertAdjacentHTML('beforeend', modalHtml);
+      
+      // Show modal
+      const modal = new bootstrap.Modal(document.getElementById('fullContentModal'));
+      modal.show();
+    }
+    
+    // Copy full content function
+    function copyFullContent(rowIndex) {
+      if (!globalData[rowIndex]) return;
+      
+      const row = globalData[rowIndex];
+      const text = `Severity: ${row.severity||''}
+Rule: ${row.rule||''}
+Keyword: ${row.keyword||''}
+Modified: ${row.modified||''}
+Extension: ${row.extension||''}
+UNC: ${row.unc||''}
+Content: ${row.content||''}`;
+      
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Content copied to clipboard!');
+      });
+    }
+    // CSV upload logic
+    const uploadCard = document.getElementById('uploadCard');
+    const statsAndWidgets = document.getElementById('statsAndWidgets');
+    const fileInput = document.getElementById('fileInput');
+    
+    function showDashboardAfterUpload() {
+      uploadCard.style.display = 'none';
+      statsAndWidgets.style.display = '';
+    }
+    
+    dropzone.addEventListener('click', () => fileInput.click());
+    dropzone.addEventListener('dragover', e => {
+      e.preventDefault();
+      dropzone.classList.add('bg-primary', 'text-white');
+    });
+    dropzone.addEventListener('dragleave', e => {
+      e.preventDefault();
+      dropzone.classList.remove('bg-primary', 'text-white');
+    });
+    dropzone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropzone.classList.remove('bg-primary', 'text-white');
+      if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+    });
+    fileInput.addEventListener('change', e => {
+      if (e.target.files.length) handleFile(e.target.files[0]);
+      e.target.value = "";
+    });
+    
+    function handleFile(file) {
+      console.log('File selected:', file.name);
+      if (!file.name.endsWith('.csv')) {
+        alert('Please upload a CSV file.');
+        return;
+      }
+      console.log('Starting CSV parse...');
+      Papa.parse(file, {
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+          console.log('CSV parse complete:', results);
+          if (!results.data || !results.data.length) {
+            alert('No data found in CSV.');
+            return;
+          }
+          console.log('Data found, rendering dashboard...');
+          uploadCard.style.display = 'none';
+          statsAndWidgets.style.display = '';
+          renderDashboard(results.data);
+        },
+        error: function(error) {
+          console.error('CSV parse error:', error);
+          alert('Error parsing CSV file: ' + error.message);
+        }
+      });
+    }
+    
+    // Sidebar toggle functionality
+    const toggleSidebar = document.getElementById('toggleSidebar');
+    if (toggleSidebar) {
+      toggleSidebar.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.body.classList.toggle('sidebar-collapse');
+      });
+    }
+    
+    // On load, show upload card and hide stats/widgets
+    document.addEventListener('DOMContentLoaded', function() {
+      uploadCard.style.display = '';
+      statsAndWidgets.style.display = 'none';
+    });
+  </script>
+  <div class="about-section mt-5" style="font-size:0.98em;opacity:0.85;text-align:center;">
+    <hr style="border-color:var(--brand-primary);">
+    <div><b>LazySnaffler Dashboard</b> v1.0 &copy; 2025 QwesiRed</div>
+    <div>Last updated: July 2025</div>
+  </div>
+</body>
+</html>

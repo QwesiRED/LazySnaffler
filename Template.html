@@ -53,6 +53,40 @@
       border: 1px solid #4a6741 !important;
       border-radius: 6px !important;
     }
+    
+    /* Fix dropdown options visibility */
+    .form-select option {
+      background: #1a1d23 !important;
+      color: #e8f4f8 !important;
+    }
+    
+    /* Fix DataTable filter dropdowns */
+    .dataTables_wrapper .dataTables_filter select,
+    .dataTables_wrapper .dataTables_filter select option {
+      background: #1a1d23 !important;
+      color: #e8f4f8 !important;
+    }
+    
+    /* Fix all select elements and their options */
+    select, select option {
+      background: #1a1d23 !important;
+      color: #e8f4f8 !important;
+    }
+    
+    /* Fix Bootstrap dropdown menus */
+    .dropdown-menu {
+      background: #1a1d23 !important;
+      border: 1px solid #4a6741 !important;
+    }
+    
+    .dropdown-item {
+      color: #e8f4f8 !important;
+    }
+    
+    .dropdown-item:hover, .dropdown-item:focus {
+      background: #2c3e50 !important;
+      color: #e8f4f8 !important;
+    }
     .table-striped > tbody > tr:nth-of-type(odd) {
       background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%) !important;
     }
@@ -296,6 +330,8 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      cursor: pointer;
+      position: relative;
     }
     
     #lootTable th:nth-child(12), #lootTable td:nth-child(12) { /* Content column */
@@ -304,6 +340,23 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      cursor: pointer;
+      position: relative;
+    }
+    
+    /* Click indicator */
+    .clickable-cell::after {
+      content: "📋";
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px;
+      opacity: 0.6;
+    }
+    
+    .clickable-cell:hover {
+      background-color: rgba(67, 160, 71, 0.1) !important;
     }
     
     /* Tooltip for truncated content */
@@ -687,6 +740,7 @@
           `<button class='btn btn-outline-sharp btn-sm mark-reviewed ms-1' title='Mark as Reviewed' data-row='${idx}' tabindex="0" aria-label="Mark as Reviewed"><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none' style='vertical-align:middle;'><rect x='3' y='3' width='14' height='14' rx='3' fill='none' stroke='#bdbdbd' stroke-width='2'/></svg></button>`;
         
         return [
+          (idx === 0 ? `<i class="fas fa-info-circle text-info me-2" style="cursor: pointer; font-size: 16px;" onclick="showActionsInfo()" title="Click for help"></i>` : '') +
           `<button class='btn btn-outline-sharp btn-sm view-details me-1' title='View Details' data-row='${idx}' tabindex="0" aria-label="View Details"><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none' style='vertical-align:middle;'><ellipse cx='10' cy='10' rx='8' ry='6' stroke='#17a2b8' stroke-width='2' fill='none'/><circle cx='10' cy='10' r='2.5' fill='#17a2b8'/></svg></button>` +
           `<button class='btn btn-outline-sharp btn-sm copy-row ms-1' title='Copy Row' data-row='${idx}' tabindex="0" aria-label="Copy Row"><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none' style='vertical-align:middle;'><rect x='5' y='3' width='10' height='14' rx='2' fill='none' stroke='#6f42c1' stroke-width='2'/><rect x='9' y='7' width='10' height='14' rx='2' fill='none' stroke='#6f42c1' stroke-width='2'/></svg></button>` +
           markButton,
@@ -699,8 +753,8 @@
           row.file_size||'',
           row.modified||'',
           row.extension||'',
-          `<span title="${(row.unc||'').replace(/"/g, '&quot;')}">${row.unc||''}</span>`,
-          `<span title="${(row.content||'').replace(/"/g, '&quot;')}">${row.content||''}</span>`,
+          `<span class="clickable-cell" data-full-text="${(row.unc||'').replace(/"/g, '&quot;')}" onclick="showContentModal('UNC Path', this.getAttribute('data-full-text'))">${row.unc||''}</span>`,
+          `<span class="clickable-cell" data-full-text="${(row.content||'').replace(/"/g, '&quot;')}" onclick="showContentModal('Content', this.getAttribute('data-full-text'))">${row.content||''}</span>`,
           isReviewed ? `<span class="badge badge-success"><i class="fas fa-check"></i> Reviewed</span>` : `<span class="badge badge-warning"><i class="fas fa-clock"></i> Pending</span>`
         ];
       });
@@ -730,6 +784,10 @@
         dom: 'Brtip',
         initComplete: function() {
           // Status column filter will be added in renderDashboard function
+          // Apply column constraints after table initialization
+          setTimeout(() => {
+            applyColumnConstraints();
+          }, 100);
         },
         buttons: [
           { extend: 'copy', className: 'btn btn-outline-sharp btn-sm', text: 'Copy All (Filtered)' },
@@ -806,6 +864,11 @@
             }
           });
         }
+        
+        // Reapply column width constraints after column visibility changes
+        setTimeout(() => {
+          applyColumnConstraints();
+        }, 100);
       });
 
       // Add filter functionality to the new filter input
@@ -1395,48 +1458,234 @@
         // Unmark as reviewed
         reviewedItems.delete(idx);
         localStorage.setItem('reviewedItems', JSON.stringify([...reviewedItems]));
-        // Update the table row directly
-        if (lootTable) {
-          const row = lootTable.row(idx);
-          const data = row.data();
-          data[8] = `<span class="badge badge-warning"><i class="fas fa-clock"></i> Pending</span>`;
-          // Update the mark button to show unchecked state
-          data[0] = data[0].replace(
-            /<rect x="3" y="3" width="14" height="14" rx="3" fill="none" stroke="#43a047" stroke-width="2"\/><path d="M6 11l3 3 5-5" stroke="#43a047" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"\/>/g,
-            '<rect x="3" y="3" width="14" height="14" rx="3" fill="none" stroke="#bdbdbd" stroke-width="2"/>'
-          );
-          row.data(data).draw();
-        }
       } else {
         // Mark as reviewed
         reviewedItems.add(idx);
         localStorage.setItem('reviewedItems', JSON.stringify([...reviewedItems]));
-        // Update the table row directly
-        if (lootTable) {
-          const row = lootTable.row(idx);
-          const data = row.data();
-          data[8] = `<span class="badge badge-success"><i class="fas fa-check"></i> Reviewed</span>`;
-          // Update the mark button to show checked state
-          data[0] = data[0].replace(
-            /<rect x="3" y="3" width="14" height="14" rx="3" fill="none" stroke="#bdbdbd" stroke-width="2"\/>/g,
-            '<rect x="3" y="3" width="14" height="14" rx="3" fill="none" stroke="#43a047" stroke-width="2"/><path d="M6 11l3 3 5-5" stroke="#43a047" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
-          );
-          row.data(data).draw();
-        }
       }
-      // Force table redraw to update checkbox states
-      setTimeout(() => {
-        if (lootTable) {
-          lootTable.draw();
-        }
-      }, 100);
       
-      // Additional redraw to ensure checkbox updates
-      setTimeout(() => {
-        if (lootTable) {
-          lootTable.draw();
-        }
-      }, 200);
+      // Regenerate table data with updated review status
+      if (lootTable && globalData) {
+        const tableData = globalData.map((row, idx) => {
+          const isReviewed = reviewedItems.has(idx);
+          const markButton = isReviewed ? 
+            `<button class='btn btn-outline-sharp btn-sm mark-reviewed ms-1' title='Mark as Reviewed' data-row='${idx}' tabindex="0" aria-label="Mark as Reviewed"><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none' style='vertical-align:middle;'><rect x='3' y='3' width='14' height='14' rx='3' fill='none' stroke='#43a047' stroke-width='2'/><path d='M6 11l3 3 5-5' stroke='#43a047' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg></button>` :
+            `<button class='btn btn-outline-sharp btn-sm mark-reviewed ms-1' title='Mark as Reviewed' data-row='${idx}' tabindex="0" aria-label="Mark as Reviewed"><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none' style='vertical-align:middle;'><rect x='3' y='3' width='14' height='14' rx='3' fill='none' stroke='#bdbdbd' stroke-width='2'/></svg></button>`;
+          
+          return [
+            (idx === 0 ? `<i class="fas fa-info-circle text-info me-2" style="cursor: pointer; font-size: 16px;" onclick="showActionsInfo()" title="Click for help"></i>` : '') +
+            `<button class='btn btn-outline-sharp btn-sm view-details me-1' title='View Details' data-row='${idx}' tabindex="0" aria-label="View Details"><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none' style='vertical-align:middle;'><ellipse cx='10' cy='10' rx='8' ry='6' stroke='#17a2b8' stroke-width='2' fill='none'/><circle cx='10' cy='10' r='2.5' fill='#17a2b8'/></svg></button>` +
+            `<button class='btn btn-outline-sharp btn-sm copy-row ms-1' title='Copy Row' data-row='${idx}' tabindex="0" aria-label="Copy Row"><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none' style='vertical-align:middle;'><rect x='5' y='3' width='10' height='14' rx='2' fill='none' stroke='#6f42c1' stroke-width='2'/><rect x='9' y='7' width='10' height='14' rx='2' fill='none' stroke='#6f42c1' stroke-width='2'/></svg></button>` +
+            markButton,
+            row.timestamp||'',
+            row.user_computer||'',
+            `<span class="severity-${row.severity}">${row.severity||''}</span>`,
+            row.rule||'',
+            row.permission||'',
+            row.keyword||'',
+            row.file_size||'',
+            row.modified||'',
+            row.extension||'',
+            `<span class="clickable-cell" data-full-text="${(row.unc||'').replace(/"/g, '&quot;')}" onclick="showContentModal('UNC Path', this.getAttribute('data-full-text'))">${row.unc||''}</span>`,
+            `<span class="clickable-cell" data-full-text="${(row.content||'').replace(/"/g, '&quot;')}" onclick="showContentModal('Content', this.getAttribute('data-full-text'))">${row.content||''}</span>`,
+            isReviewed ? `<span class="badge badge-success"><i class="fas fa-check"></i> Reviewed</span>` : `<span class="badge badge-warning"><i class="fas fa-clock"></i> Pending</span>`
+          ];
+        });
+        
+        // Clear and reload table data
+        lootTable.clear();
+        lootTable.rows.add(tableData);
+        lootTable.draw();
+        
+        // Reapply column constraints after table redraw
+        setTimeout(() => {
+          applyColumnConstraints();
+        }, 100);
+      }
+    }
+    
+    // Content modal functionality
+    function showContentModal(title, content) {
+      const modalHtml = `
+        <div class="modal fade" id="contentModal" tabindex="-1" aria-labelledby="contentModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); color: #e8f4f8; border: 1px solid #4a6741;">
+              <div class="modal-header" style="border-bottom: 1px solid #4a6741;">
+                <h5 class="modal-title" id="contentModalLabel" style="color: #43a047;">
+                  <i class="fas fa-file-alt me-2"></i>${title}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <button class="btn btn-outline-primary btn-sm" onclick="copyToClipboard('contentText')" title="Copy to clipboard">
+                    <i class="fas fa-copy me-1"></i>Copy
+                  </button>
+                </div>
+                <div class="border rounded p-3" style="background: #1a1d23; border-color: #4a6741 !important; max-height: 400px; overflow-y: auto;">
+                  <pre id="contentText" style="color: #e8f4f8; font-family: 'Courier New', monospace; white-space: pre-wrap; word-break: break-word; margin: 0;">${content}</pre>
+                </div>
+              </div>
+              <div class="modal-footer" style="border-top: 1px solid #4a6741;">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%); border: 1px solid #4a6741; color: #e8f4f8;">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Remove existing modal if any
+      const existingModal = document.getElementById('contentModal');
+      if (existingModal) {
+        existingModal.remove();
+      }
+      
+      // Add modal to body
+      document.body.insertAdjacentHTML('beforeend', modalHtml);
+      
+      // Show modal
+      const modal = new bootstrap.Modal(document.getElementById('contentModal'));
+      modal.show();
+      
+      // Clean up modal when hidden
+      document.getElementById('contentModal').addEventListener('hidden.bs.modal', function() {
+        this.remove();
+      });
+    }
+    
+    // Copy to clipboard function
+    function copyToClipboard(elementId) {
+      const element = document.getElementById(elementId);
+      const text = element.textContent;
+      
+      navigator.clipboard.writeText(text).then(function() {
+        // Show success feedback
+        const button = event.target.closest('button');
+        const originalText = button.innerHTML;
+        button.innerHTML = '<i class="fas fa-check me-1"></i>Copied!';
+        button.classList.remove('btn-outline-primary');
+        button.classList.add('btn-success');
+        
+        setTimeout(() => {
+          button.innerHTML = originalText;
+          button.classList.remove('btn-success');
+          button.classList.add('btn-outline-primary');
+        }, 2000);
+      }).catch(function(err) {
+        console.error('Failed to copy text: ', err);
+      });
+    }
+    
+    // Function to apply column constraints
+    function applyColumnConstraints() {
+      // Apply constraints to UNC column (column 11)
+      const uncCells = document.querySelectorAll('#lootTable td:nth-child(11)');
+      uncCells.forEach(cell => {
+        cell.style.maxWidth = '300px';
+        cell.style.wordBreak = 'break-all';
+        cell.style.overflow = 'hidden';
+        cell.style.textOverflow = 'ellipsis';
+        cell.style.whiteSpace = 'nowrap';
+      });
+      
+      // Apply constraints to Content column (column 12)
+      const contentCells = document.querySelectorAll('#lootTable td:nth-child(12)');
+      contentCells.forEach(cell => {
+        cell.style.maxWidth = '200px';
+        cell.style.wordBreak = 'break-all';
+        cell.style.overflow = 'hidden';
+        cell.style.textOverflow = 'ellipsis';
+        cell.style.whiteSpace = 'nowrap';
+      });
+    }
+    
+    // Show actions info modal
+    function showActionsInfo() {
+      const modalHtml = `
+        <div class="modal fade" id="actionsInfoModal" tabindex="-1" aria-labelledby="actionsInfoModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); color: #e8f4f8; border: 1px solid #4a6741;">
+              <div class="modal-header" style="border-bottom: 1px solid #4a6741;">
+                <h5 class="modal-title" id="actionsInfoModalLabel" style="color: #43a047;">
+                  <i class="fas fa-info-circle me-2"></i>Actions Column Help
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="card" style="background: linear-gradient(135deg, #1a1d23 0%, #23272b 100%); border: 1px solid #4a6741; margin-bottom: 15px;">
+                      <div class="card-body text-center">
+                        <div class="mb-3">
+                          <svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 20 20' fill='none' style='vertical-align:middle;'>
+                            <ellipse cx='10' cy='10' rx='8' ry='6' stroke='#17a2b8' stroke-width='2' fill='none'/>
+                            <circle cx='10' cy='10' r='2.5' fill='#17a2b8'/>
+                          </svg>
+                        </div>
+                        <h6 style="color: #17a2b8; font-weight: 600;">View Details</h6>
+                        <p class="mb-0" style="font-size: 14px; color: #e8f4f8;">Click to view complete information about this finding in a detailed modal popup.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card" style="background: linear-gradient(135deg, #1a1d23 0%, #23272b 100%); border: 1px solid #4a6741; margin-bottom: 15px;">
+                      <div class="card-body text-center">
+                        <div class="mb-3">
+                          <svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 20 20' fill='none' style='vertical-align:middle;'>
+                            <rect x='5' y='3' width='10' height='14' rx='2' fill='none' stroke='#6f42c1' stroke-width='2'/>
+                            <rect x='9' y='7' width='10' height='14' rx='2' fill='none' stroke='#6f42c1' stroke-width='2'/>
+                          </svg>
+                        </div>
+                        <h6 style="color: #6f42c1; font-weight: 600;">Copy Row</h6>
+                        <p class="mb-0" style="font-size: 14px; color: #e8f4f8;">Click to copy all data from this row to your clipboard for easy pasting.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card" style="background: linear-gradient(135deg, #1a1d23 0%, #23272b 100%); border: 1px solid #4a6741; margin-bottom: 15px;">
+                      <div class="card-body text-center">
+                        <div class="mb-3">
+                          <svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 20 20' fill='none' style='vertical-align:middle;'>
+                            <rect x='3' y='3' width='14' height='14' rx='3' fill='none' stroke='#43a047' stroke-width='2'/>
+                            <path d='M6 11l3 3 5-5' stroke='#43a047' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/>
+                          </svg>
+                        </div>
+                        <h6 style="color: #43a047; font-weight: 600;">Mark as Reviewed</h6>
+                        <p class="mb-0" style="font-size: 14px; color: #e8f4f8;">Click to mark this finding as reviewed. Status will change from Pending to Reviewed.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="alert alert-info mt-3" style="background: linear-gradient(135deg, #17a2b8 0%, #138496 100%); border: 1px solid #4a6741; color: #e8f4f8;">
+                  <i class="fas fa-lightbulb me-2"></i>
+                  <strong>Tip:</strong> You can also click on UNC and Content cells to expand them and view the full text content.
+                </div>
+              </div>
+              <div class="modal-footer" style="border-top: 1px solid #4a6741;">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%); border: 1px solid #4a6741; color: #e8f4f8;">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Remove existing modal if any
+      const existingModal = document.getElementById('actionsInfoModal');
+      if (existingModal) {
+        existingModal.remove();
+      }
+      
+      // Add modal to body
+      document.body.insertAdjacentHTML('beforeend', modalHtml);
+      
+      // Show modal
+      const modal = new bootstrap.Modal(document.getElementById('actionsInfoModal'));
+      modal.show();
+      
+      // Clean up modal when hidden
+      document.getElementById('actionsInfoModal').addEventListener('hidden.bs.modal', function() {
+        this.remove();
+      });
     }
     
     // Clear reviewed items when data is cleared

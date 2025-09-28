@@ -71,7 +71,7 @@ The generated dashboard includes:
 ## Author
 **QwesiRed**
 - GitHub: [@QwesiRED](https://github.com/QwesiRED)
-- LinkedIn: [Adam Nurudini](https://www.linkedin.com/in/adamnurudini/)
+- LinkedIn: [Adam N.](https://www.linkedin.com/in/adamnurudini/)
 - X (Twitter): [@Qwesi_RED](https://x.com/Qwesi_RED)
 
 ## License

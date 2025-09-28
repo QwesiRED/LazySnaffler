@@ -71,9 +71,9 @@ The generated dashboard includes:
 
 ## Author
 **QwesiRed**
-- GitHub: [@QwesiRed](https://github.com/QwesiRed)
-- LinkedIn: [QwesiRed](https://linkedin.com/in/qwesired)
-- Twitter: [@QwesiRed](https://twitter.com/qwesired)
+- GitHub: [@QwesiRED](https://github.com/QwesiRED)
+- LinkedIn: [Adam Nurudini](https://www.linkedin.com/in/adamnurudini/)
+- X (Twitter): [@Qwesi_RED](https://x.com/Qwesi_RED)
 
 ## License
 This project is open source and available under the MIT License.

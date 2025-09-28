@@ -2,10 +2,6 @@
 
 A cross-platform Python tool to parse [Snaffler](https://github.com/SnaffCon/Snaffler) logs and generate beautiful, interactive HTML dashboards for loot analysis with advanced UI/UX features.
 
-![LazySnaffler Dashboard](https://github.com/QwesiRED/LazySnaffler/raw/main/dashboard-screenshot.png)
-
-![LazySnaffler Dashboard](https://github.com/QwesiRED/LazySnaffler/raw/main/dashboard-screenshot.png)
-
 ## Features
 - **Snaffler Log Parsing**: Extracts findings from [Snaffler](https://github.com/SnaffCon/Snaffler) log files
 - **CSV Generation**: Outputs structured CSV data for dashboard consumption

@@ -1,11 +1,11 @@
 # LazySnaffler
 
-A cross-platform Python tool to parse Snaffler logs and generate beautiful, interactive HTML dashboards for loot analysis with advanced UI/UX features.
+A cross-platform Python tool to parse [Snaffler](https://github.com/SnaffCon/Snaffler) logs and generate beautiful, interactive HTML dashboards for loot analysis with advanced UI/UX features.
 
 ![LazySnaffler Dashboard](https://github.com/QwesiRED/LazySnaffler/raw/main/dashboard-screenshot.png)
 
 ## Features
-- **Snaffler Log Parsing**: Extracts findings from Snaffler log files
+- **Snaffler Log Parsing**: Extracts findings from [Snaffler](https://github.com/SnaffCon/Snaffler) log files
 - **CSV Generation**: Outputs structured CSV data for dashboard consumption
 - **Three Modes**:
   - `--http` : Serve dashboard and CSV via local HTTP server (auto-loads CSV)
@@ -21,8 +21,9 @@ A cross-platform Python tool to parse Snaffler logs and generate beautiful, inte
 - A modern web browser (Chrome, Edge, Firefox, Safari)
 
 ## Usage
-1. Place your Snaffler log (e.g. `ExampleData/snafflerlog.txt`) in the ExampleData directory.
-2. Run the tool:
+1. First, run [Snaffler](https://github.com/SnaffCon/Snaffler) to generate a log file
+2. Place your Snaffler log (e.g. `ExampleData/snafflerlog.txt`) in the ExampleData directory
+3. Run the tool:
 
 ### Manual mode (default)
 ```
